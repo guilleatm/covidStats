@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun prueba() : Unit {
-        val url = "https://reqres.in/api/users"//"https://api.covid19tracking.narrativa.com/api/countries" //"http://my-json-feed"
+        val url = "https://api.covid19tracking.narrativa.com/api/countries" //"http://my-json-feed" // "https://reqres.in/api/users"
 
 
         val jsonObjectRequest = JsonObjectRequest(Request.Method.GET, url, null,
@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
                 },
                 Response.ErrorListener { error ->
                     Log.d("debug", error.toString())
-                    textView.text = "ERROR MOTHERFUCKER"
+                    textView.text = "ERROOOOOR"
                     // TODO: Handle error
                 }
         )
@@ -52,19 +52,7 @@ class MainActivity : AppCompatActivity() {
         //Log.d("debug", queue().toString())
 
         //Log.d("debug", jsonObjectRequest.toString())
-
+        // Access the RequestQueue through your singleton class.
         //MySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest)
     }
-
-
-
-    // Access the RequestQueue through your singleton class.
-    //MySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest)
-
-
-
-
-
-
-
 }
