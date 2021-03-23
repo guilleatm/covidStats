@@ -44,6 +44,7 @@ class Network private constructor (context : Context) {
 			}
 		} catch (e: JSONException) {
 			Log.d("debug", "Algo falla (NETWORK)")
+			listener.onResponse(null)
 		}
 
 		countries.sort()

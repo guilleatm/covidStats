@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity(), MainView {
 		progressBar = findViewById(R.id.progressBar)
 		chosenCountry = findViewById(R.id.chosenCountry)
 
-		val model = Model()
+		val model = Model(applicationContext)
 		presenter = Presenter(this, model)
 	}
 
