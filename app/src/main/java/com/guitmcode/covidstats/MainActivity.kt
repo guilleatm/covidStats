@@ -99,7 +99,7 @@ class MainActivity : AppCompatActivity(), MainView {
 					val country = p0.toString()
 					countries.binarySearch { it.compareTo(country) }.let {
 						if (it >= 0)
-							countries[it]
+							presenter.setChosenCountry(countries[it])
 					}
 				}
 
