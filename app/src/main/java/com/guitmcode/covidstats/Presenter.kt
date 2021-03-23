@@ -12,7 +12,7 @@ class Presenter (val view : MainView, val model: Model) {
 		view.progressBarVisible = true
 		view.countryVisible = false
 
-		model.getCountries(object : Response.Listener<List<String>> {
+		model.getCountries(object : Response.Listener<List<String>> { // Se puede convertir a lambda
 			override fun onResponse(countries: List<String>?) {
 				if (countries != null) {
 					view.showCountries(countries)
@@ -22,7 +22,7 @@ class Presenter (val view : MainView, val model: Model) {
 					view.showError("Posible JSON malformado")
 				}
 			}
-		}, object : Response.ErrorListener {
+		}, object : Response.ErrorListener { // Se puede convertir a lambda
 				override fun onErrorResponse(error: VolleyError?) {
 					view.showError(error.toString())
 				}
@@ -31,7 +31,8 @@ class Presenter (val view : MainView, val model: Model) {
 	}
 
 	fun setChosenCountry(country: String) {
-		TODO("Not yet implemented")
+		this.country = country
+		view.showChosenCountry(this.country!!)
 	}
 
 }
