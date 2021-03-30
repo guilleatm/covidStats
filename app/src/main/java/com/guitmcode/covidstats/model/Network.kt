@@ -100,7 +100,9 @@ class Network private constructor (context : Context) {
 	}
 
 	fun getSubRegions(listener: Response.Listener<List<String>>, errorListener: Response.ErrorListener, country: String, region: String) {
-		val url = "$BASE_URL/$COUNTRIES/$country/$REGIONS/$region/$SUBREGIONS"
+		//val url = "$BASE_URL/$COUNTRIES/$country/$REGIONS/$region/$SUBREGIONS" // posar url bona
+		val url = "$BASE_URL/$COUNTRIES/$country/$REGIONS/c_valenciana/$SUBREGIONS"
+
 		Log.d("covidStats", "url subregions: $url")
 
 		val jsonObjectRequest = JsonObjectRequest(Request.Method.GET, url, null,
