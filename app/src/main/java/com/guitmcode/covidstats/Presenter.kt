@@ -3,19 +3,20 @@ package com.guitmcode.covidstats
 import android.util.Log
 import com.android.volley.Response
 import com.android.volley.VolleyError
+import com.guitmcode.covidstats.model.Country
 import com.guitmcode.covidstats.model.Model
 
 class Presenter (val view : MainView, val model: Model) {
 
-	private var country: String? = null
+	private var country: Country? = null
 	private var region: String? = null
 
 	init {
 		view.progressBarVisible = true
 		view.countryVisible = false
 
-		model.getCountries(object : Response.Listener<List<String>> { // Se puede convertir a lambda
-			override fun onResponse(countries: List<String>?) {
+		model.getCountries(object : Response.Listener<List<Country>> { // Se puede convertir a lambda
+			override fun onResponse(countries: List<Country>?) {
 				if (countries != null) {
 					view.showCountries(countries)
 					view.progressBarVisible = true
@@ -32,7 +33,7 @@ class Presenter (val view : MainView, val model: Model) {
 		})
 	}
 
-	fun setChosenCountry(country: String) {
+	fun setChosenCountry(country: Country) {
 		this.country = country
 		view.showChosenCountry(this.country!!)
 
@@ -54,7 +55,7 @@ class Presenter (val view : MainView, val model: Model) {
 				view.showError(error.toString())
 			}
 
-		}, this.country!!)
+		}, this.country!!.name!!)
 	}
 
 
@@ -80,7 +81,7 @@ class Presenter (val view : MainView, val model: Model) {
 				view.showError(error.toString())
 			}
 
-		}, this.country!!, this.region!!)
+		}, this.country!!.name!!, this.region!!)
 	}
 
 

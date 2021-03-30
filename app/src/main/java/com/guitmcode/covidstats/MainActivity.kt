@@ -13,6 +13,7 @@ import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.guitmcode.covidstats.model.Country
 import com.guitmcode.covidstats.model.Model
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.xml.transform.ErrorListener
@@ -67,16 +68,19 @@ class MainActivity : AppCompatActivity(), MainView {
 		Toast.makeText(this, message, Toast.LENGTH_LONG).show()
 	}
 
-	override fun showCountries(countries: List<String>) {
-		val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, countries)
+	override fun showCountries(countries: List<Country>) {
+		val countriesStringList: List<String> = countries.map { it.name }
+		val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, countriesStringList)
 		countryTextView.apply{
 			setAdapter(adapter)
 			setText("")
 
 			addTextChangedListener(object : TextWatcher {
 				override fun afterTextChanged(p0: Editable?) {
-					val country = p0.toString()
-					countries.binarySearch { it.compareTo(country) }.let {
+					val textWrote = p0.toString()
+					val countryWrote = Country("null_id", textWrote)
+
+					countries.binarySearch { it.compareTo(countryWrote) }.let {
 						if (it >= 0)
 							presenter.setChosenCountry(countries[it])
 					}
@@ -94,8 +98,8 @@ class MainActivity : AppCompatActivity(), MainView {
 		}
 	}
 
-	override fun showChosenCountry(country: String) {
-		chosenCountry.setText(country)
+	override fun showChosenCountry(country: Country) {
+		chosenCountry.setText(country.name)
 	}
 
 

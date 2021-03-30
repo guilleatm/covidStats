@@ -7,7 +7,7 @@ class Model (context: Context){
 
 	private val network = Network.getInstance(context)
 
-	fun getCountries(listener: Response.Listener<List<String>>, errorListener: Response.ErrorListener) {
+	fun getCountries(listener: Response.Listener<List<Country>>, errorListener: Response.ErrorListener) {
 		network.getCountries(listener, errorListener)
 	}
 

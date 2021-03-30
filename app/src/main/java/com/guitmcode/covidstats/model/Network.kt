@@ -15,6 +15,7 @@ private const val COUNTRIES = "countries"
 private const val REGIONS = "regions"
 private const val SUBREGIONS = "sub_regions"
 private  const val NAME_LABEL = "name"
+private const val ID_LABEL = "id"
 
 class Network private constructor (context : Context) {
 
@@ -22,7 +23,7 @@ class Network private constructor (context : Context) {
 
 	val queue = Volley.newRequestQueue(context)
 
-	fun getCountries(listener: Response.Listener<List<String>>, errorListener: Response.ErrorListener) {
+	fun getCountries(listener: Response.Listener<List<Country>>, errorListener: Response.ErrorListener) {
 		val url = "$BASE_URL/$COUNTRIES"
 		Log.d("covidStats", "url countries: $url")
 		val jsonObjectRequest = JsonObjectRequest(Request.Method.GET, url, null,
@@ -34,16 +35,17 @@ class Network private constructor (context : Context) {
 
 	private fun processCountries(
 		response: JSONObject,
-		listener: Response.Listener<List<String>>
+		listener: Response.Listener<List<Country>>
 	) {
-		val countries = ArrayList<String>()
+		val countries = ArrayList<Country>()
 
 		try {
 			val countryArray = response.getJSONArray(COUNTRIES)
 			for (i in 0 until countryArray.length()) {
 				val countryObject : JSONObject = countryArray[i] as JSONObject
+				val id = countryObject.getString(ID_LABEL)
 				val name = countryObject.getString(NAME_LABEL)
-				countries.add(name)
+				countries.add(Country(id, name))
 			}
 		} catch (e: JSONException) {
 			Log.d("covidStats", "Algo falla (NETWORK)")
@@ -51,7 +53,8 @@ class Network private constructor (context : Context) {
 		}
 
 		countries.sort()
-		Log.d("covidStats", "País 1: ${countries[0]}")
+
+		Log.d("covidStats", "País 1: ${countries[0].name}")
 
 		listener.onResponse(countries)
 	}
