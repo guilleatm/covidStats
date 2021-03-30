@@ -7,4 +7,7 @@ interface MainView {
     fun showError(message: String)
     fun showCountries(countries: List<String>)
     fun showChosenCountry(country: String)
+
+    fun showRegions(countries: List<String>)
+    fun showChosenRegion(country: String)
 }

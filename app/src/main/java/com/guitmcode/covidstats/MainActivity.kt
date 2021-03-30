@@ -14,6 +14,7 @@ import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.guitmcode.covidstats.model.Model
+import kotlinx.android.synthetic.main.activity_main.*
 import javax.xml.transform.ErrorListener
 
 
@@ -21,6 +22,10 @@ class MainActivity : AppCompatActivity(), MainView {
 
 	lateinit var countryText : TextView
 	lateinit var countryTextView: AutoCompleteTextView
+
+	lateinit var regionText : TextView
+	lateinit var regionTextView: AutoCompleteTextView
+
 	lateinit var progressBar : ProgressBar
 	lateinit var chosenCountry : TextView
 
@@ -35,6 +40,9 @@ class MainActivity : AppCompatActivity(), MainView {
 		countryTextView = findViewById(R.id.countryTextView)
 		progressBar = findViewById(R.id.progressBar)
 		chosenCountry = findViewById(R.id.chosenCountry)
+
+		regionText = findViewById(R.id.regionText)
+		regionTextView = findViewById(R.id.regionTextView)
 
 		val model = Model(applicationContext)
 		presenter = Presenter(this, model)
@@ -91,34 +99,36 @@ class MainActivity : AppCompatActivity(), MainView {
 	}
 
 
-/* from google
-    private fun prueba() : Unit {
-        val url = "https://api.covid19tracking.narrativa.com/api/countries" //"http://my-json-feed" // "https://reqres.in/api/users"
+	override fun showRegions(regions: List<String>) {
+		val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, regions)
+		regionTextView.apply{
+			setAdapter(adapter)
+			setText("")
 
+			addTextChangedListener(object : TextWatcher {
+				override fun afterTextChanged(p0: Editable?) {
+					val region = p0.toString()
+					regions.binarySearch { it.compareTo(region) }.let {
+						if (it >= 0)
+							presenter.setChosenRegion(regions[it])
+					}
+				}
 
-        val jsonObjectRequest = JsonObjectRequest(Request.Method.GET, url, null,
-                Response.Listener { response ->
-                    //print("Response: %s".format(response.toString()))
-                    Log.d("debug", "Response: %s".format(response.toString()))
-                    textView.text = "Response: %s".format(response.toString())
-                },
-                Response.ErrorListener { error ->
-                    Log.d("debug", error.toString())
-                    textView.text = "ERROOOOOR"
-                    // TODO: Handle error
-                }
-        )
+				override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+					// Do nothing
+				}
 
-        val queue = Volley.newRequestQueue(this)
-        queue.add(jsonObjectRequest)
-        //Log.d("debug", queue().toString())
+				override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+					// Do nothing
+				}
 
-        //Log.d("debug", jsonObjectRequest.toString())
-        // Access the RequestQueue through your singleton class.
-        //MySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest)
-    }
+			})
+		}
+	}
 
-    */
+	override fun showChosenRegion(country: String) {
+		chosenCountry.setText(country)
+	}
 
 
 

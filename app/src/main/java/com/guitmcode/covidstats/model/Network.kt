@@ -13,6 +13,7 @@ import org.json.JSONObject
 private const val BASE_URL = "https://api.covid19tracking.narrativa.com/api"
 private const val COUNTRIES = "countries"
 private const val REGIONS = "regions"
+private const val SUBREGIONS = "sub_regions"
 private  const val NAME_LABEL = "name"
 
 class Network private constructor (context : Context) {
@@ -77,7 +78,7 @@ class Network private constructor (context : Context) {
 			val countryArray : JSONArray = response.getJSONArray(COUNTRIES)
 
 			val intermediateObject : JSONObject = countryArray.getJSONObject(0)
-			val regionsArray : JSONArray = intermediateObject.getJSONArray("Spain")
+			val regionsArray : JSONArray = intermediateObject.getJSONArray("Spain") // PONER LA COUNTRIE
 			//val pp : JSONObject = regionsArray[0]
 
 			Log.d("covidStats", regionsArray.toString())
@@ -96,6 +97,50 @@ class Network private constructor (context : Context) {
 		Log.d("covidStats", "Region 1: ${regions[0]}")
 
 		listener.onResponse(regions)
+	}
+
+	fun getSubRegions(listener: Response.Listener<List<String>>, errorListener: Response.ErrorListener, country: String, region: String) {
+		val url = "$BASE_URL/$COUNTRIES/$country/$REGIONS/$region/$SUBREGIONS"
+		Log.d("covidStats", "url subregions: $url")
+
+		val jsonObjectRequest = JsonObjectRequest(Request.Method.GET, url, null,
+			{ response -> processSubRegions(response, listener, country, region) },
+			{ error -> errorListener.onErrorResponse(error) }
+		)
+		queue.add(jsonObjectRequest)
+	}
+
+	private fun processSubRegions(
+		response: JSONObject,
+		listener: Response.Listener<List<String>>,
+		country: String,
+		region: String
+	) {
+		val subRegions = ArrayList<String>()
+
+		try {
+			val countryArray : JSONArray = response.getJSONArray(COUNTRIES)
+
+			val intermediateObject : JSONObject = countryArray.getJSONObject(0)
+			val intermediateObject2 : JSONObject = intermediateObject.getJSONObject("Spain") // PONER LA COUNTRIE
+			val subRegionsArray : JSONArray = intermediateObject2.getJSONArray("c_valenciana") // PONER REGION
+
+			Log.d("covidStats", subRegionsArray.toString())
+
+			for (i in 0 until subRegionsArray.length()) {
+				val subRegionObject : JSONObject = subRegionsArray[i] as JSONObject
+				val name = subRegionObject.getString(NAME_LABEL)
+				subRegions.add(name)
+			}
+		} catch (e: JSONException) {
+			Log.d("covidStats", "Algo falla (NETWORK) subregions")
+			listener.onResponse(null)
+		}
+
+		subRegions.sort()
+		Log.d("covidStats", "Subregion 1: ${subRegions[0]}")
+
+		listener.onResponse(subRegions)
 	}
 
 }
