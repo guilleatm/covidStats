@@ -7,13 +7,99 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/pp"
+        android:id="@+id/countryText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:text="Country"
+
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+
+        android:width="80dp"
+    />
+
+    <AutoCompleteTextView
+        android:id="@+id/countryTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="64dp"
+        android:hint="Country"
+        app:layout_constraintBaseline_toBaselineOf="@id/countryText"
+        app:layout_constraintStart_toEndOf="@id/countryText"
+        android:text="Spain"
+        android:width="100dp"
+        />
+
+    <TextView
+        android:id="@+id/regionText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:text="Region"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/countryText"
+
+        android:width="80dp"/>
+
+    <AutoCompleteTextView
+        android:id="@+id/regionTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="64dp"
+        android:hint="Country"
+        android:text="Valencia"
+        app:layout_constraintBaseline_toBaselineOf="@+id/regionText"
+        app:layout_constraintStart_toEndOf="@+id/regionText"
+        android:width="100dp"
+        />
+
+    <TextView
+        android:id="@+id/subregionText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+
+        android:layout_marginTop="32dp"
+        android:width="80dp"
+
+        android:text="Country"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/regionText" />
+
+    <AutoCompleteTextView
+        android:id="@+id/subregionTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="64dp"
+        android:width="100dp"
+        android:hint="Subregion"
+        android:text="Alacant"
+        app:layout_constraintBaseline_toBaselineOf="@+id/subregionText"
+        app:layout_constraintStart_toEndOf="@+id/subregionText" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/chosenCountry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="96dp"
+        android:text="Country"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

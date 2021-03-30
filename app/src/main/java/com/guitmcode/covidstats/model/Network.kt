@@ -11,6 +11,7 @@ import org.json.JSONObject
 
 private const val BASE_URL = "https://api.covid19tracking.narrativa.com/api"
 private const val COUNTRIES = "countries"
+private const val REGIONS = "regions"
 private  const val NAME_LABEL = "name"
 
 class Network private constructor (context : Context) {
@@ -21,7 +22,7 @@ class Network private constructor (context : Context) {
 
 	fun getCountries(listener: Response.Listener<List<String>>, errorListener: Response.ErrorListener) {
 		val url = "$BASE_URL/$COUNTRIES"
-		Log.d("debug", "url: $url")
+		Log.d("covidStats", "url: $url")
 		val jsonObjectRequest = JsonObjectRequest(Request.Method.GET, url, null,
 			{ response -> processCountries(response, listener) },
 			{ error -> errorListener.onErrorResponse(error) }
@@ -43,14 +44,49 @@ class Network private constructor (context : Context) {
 				countries.add(name)
 			}
 		} catch (e: JSONException) {
-			Log.d("debug", "Algo falla (NETWORK)")
+			Log.d("covidStats", "Algo falla (NETWORK)")
 			listener.onResponse(null)
 		}
 
 		countries.sort()
-		Log.d("debug", "País 1: ${countries[0]}")
+		Log.d("covidStats", "País 1: ${countries[0]}")
 
 		listener.onResponse(countries)
+	}
+
+	fun getRegion(listener: Response.Listener<List<String>>, errorListener: Response.ErrorListener, country: String) {
+		val url = "$BASE_URL/$COUNTRIES/$country/$REGIONS"
+
+		val jsonObjectRequest = JsonObjectRequest(Request.Method.GET, url, null,
+			{ response -> processRegions(response, listener, country) },
+			{ error -> errorListener.onErrorResponse(error) }
+		)
+		queue.add(jsonObjectRequest)
+	}
+
+	private fun processRegions(
+		response: JSONObject,
+		listener: Response.Listener<List<String>>,
+		country: String
+	) {
+		val regions = ArrayList<String>()
+
+		try {
+			val regionsArray = response.getJSONArray(country)
+			for (i in 0 until regionsArray.length()) {
+				val regionObject : JSONObject = regionsArray[i] as JSONObject
+				val name = regionObject.getString(NAME_LABEL)
+				regions.add(name)
+			}
+		} catch (e: JSONException) {
+			Log.d("covidStats", "Algo falla (NETWORK)")
+			listener.onResponse(null)
+		}
+
+		regions.sort()
+		Log.d("covidStats", "Region 1: ${regions[0]}")
+
+		listener.onResponse(regions)
 	}
 
 }
