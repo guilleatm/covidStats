@@ -50,8 +50,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="64dp"
-        android:hint="Country"
-        android:text="Valencia"
+        android:hint="Region"
         app:layout_constraintBaseline_toBaselineOf="@+id/regionText"
         app:layout_constraintStart_toEndOf="@+id/regionText"
         android:width="100dp"
@@ -77,7 +76,6 @@
         android:layout_marginStart="64dp"
         android:width="100dp"
         android:hint="Subregion"
-        android:text="Alacant"
         app:layout_constraintBaseline_toBaselineOf="@+id/subregionText"
         app:layout_constraintStart_toEndOf="@+id/subregionText" />
 

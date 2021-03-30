@@ -1,5 +1,6 @@
 package com.guitmcode.covidstats
 
+import android.util.Log
 import com.android.volley.Response
 import com.android.volley.VolleyError
 import com.guitmcode.covidstats.model.Model
@@ -33,6 +34,26 @@ class Presenter (val view : MainView, val model: Model) {
 	fun setChosenCountry(country: String) {
 		this.country = country
 		view.showChosenCountry(this.country!!)
+
+		// Improvisaçao
+
+		model.getRegions(object : Response.Listener<List<String>> { // Se puede convertir a lambda
+			override fun onResponse(regions: List<String>?) {
+				if (regions != null) {
+					Log.d("covidStats", regions[0])
+					//view.showRegions(regions)
+					//view.progressBarVisible = true
+					//view.countryVisible = true
+				} else {
+					view.showError("Posible JSON malformado")
+				}
+			}
+		}, object : Response.ErrorListener { // Se puede convertir a lambda
+			override fun onErrorResponse(error: VolleyError?) {
+				view.showError(error.toString())
+			}
+
+		}, this.country!!)
 	}
 
 }

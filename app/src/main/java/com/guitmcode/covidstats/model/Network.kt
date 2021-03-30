@@ -6,6 +6,7 @@ import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 
@@ -22,7 +23,7 @@ class Network private constructor (context : Context) {
 
 	fun getCountries(listener: Response.Listener<List<String>>, errorListener: Response.ErrorListener) {
 		val url = "$BASE_URL/$COUNTRIES"
-		Log.d("covidStats", "url: $url")
+		Log.d("covidStats", "url countries: $url")
 		val jsonObjectRequest = JsonObjectRequest(Request.Method.GET, url, null,
 			{ response -> processCountries(response, listener) },
 			{ error -> errorListener.onErrorResponse(error) }
@@ -54,8 +55,9 @@ class Network private constructor (context : Context) {
 		listener.onResponse(countries)
 	}
 
-	fun getRegion(listener: Response.Listener<List<String>>, errorListener: Response.ErrorListener, country: String) {
+	fun getRegions(listener: Response.Listener<List<String>>, errorListener: Response.ErrorListener, country: String) {
 		val url = "$BASE_URL/$COUNTRIES/$country/$REGIONS"
+		Log.d("covidStats", "url regions: $url")
 
 		val jsonObjectRequest = JsonObjectRequest(Request.Method.GET, url, null,
 			{ response -> processRegions(response, listener, country) },
@@ -72,14 +74,21 @@ class Network private constructor (context : Context) {
 		val regions = ArrayList<String>()
 
 		try {
-			val regionsArray = response.getJSONArray(country)
+			val countryArray : JSONArray = response.getJSONArray(COUNTRIES)
+
+			val intermediateObject : JSONObject = countryArray.getJSONObject(0)
+			val regionsArray : JSONArray = intermediateObject.getJSONArray("Spain")
+			//val pp : JSONObject = regionsArray[0]
+
+			Log.d("covidStats", regionsArray.toString())
+
 			for (i in 0 until regionsArray.length()) {
 				val regionObject : JSONObject = regionsArray[i] as JSONObject
 				val name = regionObject.getString(NAME_LABEL)
 				regions.add(name)
 			}
 		} catch (e: JSONException) {
-			Log.d("covidStats", "Algo falla (NETWORK)")
+			Log.d("covidStats", "Algo falla (NETWORK) regions")
 			listener.onResponse(null)
 		}
 
