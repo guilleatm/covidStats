@@ -5,11 +5,14 @@ import com.android.volley.Response
 import com.android.volley.VolleyError
 import com.guitmcode.covidstats.model.Country
 import com.guitmcode.covidstats.model.Model
+import com.guitmcode.covidstats.model.Region
+import com.guitmcode.covidstats.model.Subregion
 
 class Presenter (val view : MainView, val model: Model) {
 
 	private var country: Country? = null
-	private var region: String? = null
+	private var region: Region? = null
+	private var subregion: Subregion? = null
 
 	init {
 		view.progressBarVisible = true
@@ -39,10 +42,10 @@ class Presenter (val view : MainView, val model: Model) {
 
 		// Improvisaçao
 
-		model.getRegions(object : Response.Listener<List<String>> { // Se puede convertir a lambda
-			override fun onResponse(regions: List<String>?) {
+		model.getRegions(object : Response.Listener<List<Region>> { // Se puede convertir a lambda
+			override fun onResponse(regions: List<Region>?) {
 				if (regions != null) {
-					Log.d("covidStats", regions[0])
+					Log.d("covidStats", regions[0].name)
 					view.showRegions(regions)
 					//view.progressBarVisible = true
 					//view.countryVisible = true
@@ -55,21 +58,21 @@ class Presenter (val view : MainView, val model: Model) {
 				view.showError(error.toString())
 			}
 
-		}, this.country!!.name!!)
+		}, this.country!!)
 	}
 
 
-	fun setChosenRegion(region: String) {
+	fun setChosenRegion(region: Region) {
 		this.region = region
 		view.showChosenRegion(this.region!!)
 
 		// Improvisaçao
 
-		model.getSubRegions(object : Response.Listener<List<String>> { // Se puede convertir a lambda
-			override fun onResponse(subregions: List<String>?) {
+		model.getSubregions(object : Response.Listener<List<Subregion>> { // Se puede convertir a lambda
+			override fun onResponse(subregions: List<Subregion>?) {
 				if (subregions != null) {
-					Log.d("covidStats", subregions[0])
-					view.showRegions(subregions)
+					Log.d("covidStats", subregions[0].name)
+					view.showSubregions(subregions)
 					//view.progressBarVisible = true
 					//view.countryVisible = true
 				} else {
@@ -81,7 +84,7 @@ class Presenter (val view : MainView, val model: Model) {
 				view.showError(error.toString())
 			}
 
-		}, this.country!!.name!!, this.region!!)
+		}, this.country!!, this.region!!)
 	}
 
 

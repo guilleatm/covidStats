@@ -11,11 +11,11 @@ class Model (context: Context){
 		network.getCountries(listener, errorListener)
 	}
 
-	fun getRegions(listener: Response.Listener<List<String>>, errorListener: Response.ErrorListener, country: String) {
+	fun getRegions(listener: Response.Listener<List<Region>>, errorListener: Response.ErrorListener, country: Country) {
 		network.getRegions(listener, errorListener, country)
 	}
 
-	fun getSubRegions(listener: Response.Listener<List<String>>, errorListener: Response.ErrorListener, country: String, region: String) {
-		network.getSubRegions(listener, errorListener, country, region)
+	fun getSubregions(listener: Response.Listener<List<Subregion>>, errorListener: Response.ErrorListener, country: Country, region: Region) {
+		network.getSubregions(listener, errorListener, country, region)
 	}
 }

@@ -15,6 +15,8 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.guitmcode.covidstats.model.Country
 import com.guitmcode.covidstats.model.Model
+import com.guitmcode.covidstats.model.Region
+import com.guitmcode.covidstats.model.Subregion
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.xml.transform.ErrorListener
 
@@ -103,16 +105,18 @@ class MainActivity : AppCompatActivity(), MainView {
 	}
 
 
-	override fun showRegions(regions: List<String>) {
-		val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, regions)
+	override fun showRegions(regions: List<Region>) {
+		val regionsStringList: List<String> = regions.map { it.name }
+		val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, regionsStringList)
 		regionTextView.apply{
 			setAdapter(adapter)
 			setText("")
 
 			addTextChangedListener(object : TextWatcher {
 				override fun afterTextChanged(p0: Editable?) {
-					val region = p0.toString()
-					regions.binarySearch { it.compareTo(region) }.let {
+					val textWrote = p0.toString()
+					val regionWrote = Region("nuññ_id", textWrote)
+					regions.binarySearch { it.compareTo(regionWrote) }.let {
 						if (it >= 0)
 							presenter.setChosenRegion(regions[it])
 					}
@@ -130,10 +134,18 @@ class MainActivity : AppCompatActivity(), MainView {
 		}
 	}
 
-	override fun showChosenRegion(country: String) {
-		chosenCountry.setText(country)
+	override fun showChosenRegion(region: Region) {
+		//chosenRegion.setText(region.name)
 	}
 
 
+	override fun showSubregions(subregions: List<Subregion>) {
+		TODO("not yet")
+	}
+
+	override fun showChosenSubregion(subregion: Subregion) {
+		TODO("not yet")
+		//chosenSubregion.setText(subregion.name)
+	}
 
 }
