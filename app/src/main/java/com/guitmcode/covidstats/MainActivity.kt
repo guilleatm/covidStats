@@ -29,8 +29,11 @@ class MainActivity : AppCompatActivity(), MainView {
 	lateinit var regionText : TextView
 	lateinit var regionTextView: AutoCompleteTextView
 
+	lateinit var subregionText : TextView
+	lateinit var subregionTextView : AutoCompleteTextView
+
 	lateinit var progressBar : ProgressBar
-	lateinit var chosenCountry : TextView
+	lateinit var chosenPlace : TextView
 
 	lateinit var presenter : Presenter
 
@@ -42,10 +45,13 @@ class MainActivity : AppCompatActivity(), MainView {
 		countryText = findViewById(R.id.countryText)
 		countryTextView = findViewById(R.id.countryTextView)
 		progressBar = findViewById(R.id.progressBar)
-		chosenCountry = findViewById(R.id.chosenCountry)
+		chosenPlace = findViewById(R.id.chosenPlace)
 
 		regionText = findViewById(R.id.regionText)
 		regionTextView = findViewById(R.id.regionTextView)
+
+		subregionText = findViewById(R.id.subregionText)
+		subregionTextView = findViewById(R.id.subregionTextView)
 
 		val model = Model(applicationContext)
 		presenter = Presenter(this, model)
@@ -60,6 +66,23 @@ class MainActivity : AppCompatActivity(), MainView {
 			countryText.visibility = v
 			countryTextView.visibility = v
 		}
+
+	override var regionVisible: Boolean
+		get() = regionText.visibility == View.VISIBLE
+		set(value) {
+			val v = if (value) View.VISIBLE else View.GONE
+			regionText.visibility = v
+			regionTextView.visibility = v
+		}
+
+	override var subregionVisible: Boolean
+		get() = subregionText.visibility == View.VISIBLE
+		set(value) {
+			val v = if (value) View.VISIBLE else View.GONE
+			subregionText.visibility = v
+			subregionTextView.visibility = v
+		}
+
 	override var progressBarVisible: Boolean
 		get() = progressBar.visibility == View.VISIBLE
 		set(value) {
@@ -100,10 +123,6 @@ class MainActivity : AppCompatActivity(), MainView {
 		}
 	}
 
-	override fun showChosenCountry(country: Country) {
-		chosenCountry.setText(country.name)
-	}
-
 
 	override fun showRegions(regions: List<Region>) {
 		val regionsStringList: List<String> = regions.map { it.name }
@@ -115,7 +134,7 @@ class MainActivity : AppCompatActivity(), MainView {
 			addTextChangedListener(object : TextWatcher {
 				override fun afterTextChanged(p0: Editable?) {
 					val textWrote = p0.toString()
-					val regionWrote = Region("nuññ_id", textWrote)
+					val regionWrote = Region("null_id", textWrote)
 					regions.binarySearch { it.compareTo(regionWrote) }.let {
 						if (it >= 0)
 							presenter.setChosenRegion(regions[it])
@@ -134,18 +153,49 @@ class MainActivity : AppCompatActivity(), MainView {
 		}
 	}
 
-	override fun showChosenRegion(region: Region) {
-		//chosenRegion.setText(region.name)
-	}
-
 
 	override fun showSubregions(subregions: List<Subregion>) {
-		TODO("not yet")
+		val subregionsStringList: List<String> = subregions.map { it.name }
+		val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, subregionsStringList)
+		subregionTextView.apply{
+			setAdapter(adapter)
+			setText("")
+
+			addTextChangedListener(object : TextWatcher {
+				override fun afterTextChanged(p0: Editable?) {
+					val textWrote = p0.toString()
+					val subregionWrote = Subregion("null_id", textWrote)
+					subregions.binarySearch { it.compareTo(subregionWrote) }.let {
+						if (it >= 0)
+							presenter.setChosenSubregion(subregions[it])
+					}
+				}
+
+				override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+					// Do nothing
+				}
+
+				override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+					// Do nothing
+				}
+
+			})
+		}
 	}
 
-	override fun showChosenSubregion(subregion: Subregion) {
-		TODO("not yet")
-		//chosenSubregion.setText(subregion.name)
+
+	override fun showChosenPlace(countrie: Country, region: Region?, subregion: Subregion?) {
+
+		var place = countrie.name
+
+		if (region != null) {
+			place = "$place, ${region.name}"
+
+			if (subregion != null)
+				place = "$place, ${subregion.name}"
+		}
+
+		chosenPlace.setText(place)
 	}
 
 }

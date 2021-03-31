@@ -6,16 +6,16 @@ import com.guitmcode.covidstats.model.Subregion
 
 interface MainView {
     var countryVisible: Boolean
+    var regionVisible: Boolean
+    var subregionVisible: Boolean
+
     var progressBarVisible: Boolean
 
     fun showError(message: String)
 
     fun showCountries(countries: List<Country>)
-    fun showChosenCountry(country: Country)
-
     fun showRegions(countries: List<Region>)
-    fun showChosenRegion(country: Region)
-
     fun showSubregions(countries: List<Subregion>)
-    fun showChosenSubregion(country: Subregion)
+
+    fun showChosenPlace(countrie: Country, region: Region?, subregion: Subregion?)
 }

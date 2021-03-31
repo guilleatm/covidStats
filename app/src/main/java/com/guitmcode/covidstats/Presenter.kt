@@ -38,7 +38,7 @@ class Presenter (val view : MainView, val model: Model) {
 
 	fun setChosenCountry(country: Country) {
 		this.country = country
-		view.showChosenCountry(this.country!!)
+		view.showChosenPlace(this.country!!, this.region, this.subregion)
 
 		// Improvisaçao
 
@@ -64,7 +64,7 @@ class Presenter (val view : MainView, val model: Model) {
 
 	fun setChosenRegion(region: Region) {
 		this.region = region
-		view.showChosenRegion(this.region!!)
+		view.showChosenPlace(this.country!!, this.region, this.subregion)
 
 		// Improvisaçao
 
@@ -85,6 +85,12 @@ class Presenter (val view : MainView, val model: Model) {
 			}
 
 		}, this.country!!, this.region!!)
+	}
+
+
+	fun setChosenSubregion(subregion: Subregion) {
+		this.subregion = subregion
+		view.showChosenPlace(this.country!!, this.region, this.subregion)
 	}
 
 
