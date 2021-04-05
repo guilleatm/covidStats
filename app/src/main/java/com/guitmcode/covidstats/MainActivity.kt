@@ -73,15 +73,15 @@ class MainActivity : AppCompatActivity(), MainView {
 		presenter = Presenter(this, model)
 
 		countryButton.setOnClickListener {
-			presenter.goForRegions()
+			goCountry()
 		}
 
 		regionButton.setOnClickListener {
-			presenter.goForSubregions()
+			goRegion()
 		}
 
 		subregionButton.setOnClickListener {
-			goStatistics()
+			goSubregion()
 		}
 
 
@@ -236,7 +236,12 @@ class MainActivity : AppCompatActivity(), MainView {
 		chosenPlace.setText(place)
 	}
 
-	private fun goStatistics() {
+	private fun goCountry() {
+		val intent = Intent(this, StatisticsActivity::class.java)
+		startActivity(intent)
+	}
+
+	private fun goRegion() {
 //		val intent = Intent(this, DisplayMessageActivity::class.java).apply {
 //			putExtra(EXTRA_MESSAGE, message)
 //		}
@@ -247,4 +252,8 @@ class MainActivity : AppCompatActivity(), MainView {
 
 	}
 
+	private fun goSubregion() {
+		val intent = Intent(this, StatisticsActivity::class.java)
+		startActivity(intent)
+	}
 }

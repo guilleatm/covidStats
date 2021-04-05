@@ -54,9 +54,6 @@ class Presenter (val view : MainView, val model: Model) {
 
 	fun setChosenCountry(country: Country) {
 		this.country = country
-	}
-
-	fun goForRegions() {
 
 		view.showChosenPlace(this.country!!, this.region, this.subregion)
 
@@ -84,9 +81,7 @@ class Presenter (val view : MainView, val model: Model) {
 
 	fun setChosenRegion(region: Region) {
 		this.region = region
-	}
 
-	fun goForSubregions() {
 		view.showChosenPlace(this.country!!, this.region, this.subregion)
 
 		view.progressBarVisible = true
