@@ -83,7 +83,10 @@ class Network private constructor (context : Context) {
 			val intermediateObject : JSONObject = countryArray.getJSONObject(0)
 			val regionsArray : JSONArray = intermediateObject.getJSONArray(country.id)
 
-			Log.d("covidStats", regionsArray.toString())
+			if (regionsArray.length() == 0) {
+				listener.onResponse(regions)
+				return
+			}
 
 			for (i in 0 until regionsArray.length()) {
 				val regionObject : JSONObject = regionsArray[i] as JSONObject
@@ -129,6 +132,11 @@ class Network private constructor (context : Context) {
 			val intermediateObject : JSONObject = countryArray.getJSONObject(0)
 			val intermediateObject2 : JSONObject = intermediateObject.getJSONObject(country.id)
 			val subregionsArray : JSONArray = intermediateObject2.getJSONArray(region.id)
+
+			if (subregionsArray.length() == 0) {
+				listener.onResponse(subregions)
+				return
+			}
 
 			for (i in 0 until subregionsArray.length()) {
 				val subregionObject : JSONObject = subregionsArray[i] as JSONObject

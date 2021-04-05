@@ -1,12 +1,19 @@
 package com.guitmcode.covidstats
 
+
+import android.content.Intent
 import android.util.Log
+import android.view.View
+import androidx.core.content.ContextCompat.startActivity
 import com.android.volley.Response
 import com.android.volley.VolleyError
 import com.guitmcode.covidstats.model.Country
 import com.guitmcode.covidstats.model.Model
 import com.guitmcode.covidstats.model.Region
 import com.guitmcode.covidstats.model.Subregion
+
+
+
 
 class Presenter (val view : MainView, val model: Model) {
 
@@ -16,13 +23,22 @@ class Presenter (val view : MainView, val model: Model) {
 
 	init {
 		view.progressBarVisible = true
+
 		view.countryVisible = false
+		view.regionVisible = false
+		view.subregionVisible = false
+
+		view.countryButton.isEnabled = false
+		view.regionButton.isEnabled = false
+		view.subregionButton.isEnabled = false
+
+
 
 		model.getCountries(object : Response.Listener<List<Country>> { // Se puede convertir a lambda
 			override fun onResponse(countries: List<Country>?) {
 				if (countries != null) {
 					view.showCountries(countries)
-					view.progressBarVisible = true
+					view.progressBarVisible = false
 					view.countryVisible = true
 				} else {
 					view.showError("Posible JSON malformado")
@@ -38,19 +54,23 @@ class Presenter (val view : MainView, val model: Model) {
 
 	fun setChosenCountry(country: Country) {
 		this.country = country
+	}
+
+	fun goForRegions() {
+
 		view.showChosenPlace(this.country!!, this.region, this.subregion)
 
-		// Improvisaçao
-
+		view.progressBarVisible = true
 		model.getRegions(object : Response.Listener<List<Region>> { // Se puede convertir a lambda
 			override fun onResponse(regions: List<Region>?) {
-				if (regions != null) {
+				if (!regions.isNullOrEmpty()) {
 					Log.d("covidStats", regions[0].name)
 					view.showRegions(regions)
-					//view.progressBarVisible = true
-					//view.countryVisible = true
+					view.progressBarVisible = false
+					view.regionVisible = true
 				} else {
-					view.showError("Posible JSON malformado")
+					view.progressBarVisible = false
+					view.showError("No hay regiones")
 				}
 			}
 		}, object : Response.ErrorListener { // Se puede convertir a lambda
@@ -64,19 +84,22 @@ class Presenter (val view : MainView, val model: Model) {
 
 	fun setChosenRegion(region: Region) {
 		this.region = region
+	}
+
+	fun goForSubregions() {
 		view.showChosenPlace(this.country!!, this.region, this.subregion)
 
-		// Improvisaçao
-
+		view.progressBarVisible = true
 		model.getSubregions(object : Response.Listener<List<Subregion>> { // Se puede convertir a lambda
 			override fun onResponse(subregions: List<Subregion>?) {
-				if (subregions != null) {
-					Log.d("covidStats", subregions[0].name)
+				if (!subregions.isNullOrEmpty()) {
 					view.showSubregions(subregions)
-					//view.progressBarVisible = true
-					//view.countryVisible = true
+					view.progressBarVisible = false
+					view.subregionVisible = true
 				} else {
-					view.showError("Posible JSON malformado")
+					view.progressBarVisible = false
+					view.showError("No hay subregiones")
+
 				}
 			}
 		}, object : Response.ErrorListener { // Se puede convertir a lambda
@@ -92,7 +115,4 @@ class Presenter (val view : MainView, val model: Model) {
 		this.subregion = subregion
 		view.showChosenPlace(this.country!!, this.region, this.subregion)
 	}
-
-
-
 }

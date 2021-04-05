@@ -10,27 +10,25 @@
         android:id="@+id/countryText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Country"
-
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
 
+        android:layout_marginTop="64dp"
         android:width="80dp"
-    />
+        android:text="Country"
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toTopOf="parent" />
 
     <AutoCompleteTextView
         android:id="@+id/countryTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="64dp"
+        android:layout_marginStart="32dp"
+        android:width="132dp"
         android:hint="Country"
-        app:layout_constraintBaseline_toBaselineOf="@id/countryText"
-        app:layout_constraintStart_toEndOf="@id/countryText"
         android:text="Spain"
-        android:width="100dp"
-        />
+        app:layout_constraintBaseline_toBaselineOf="@id/countryText"
+        app:layout_constraintStart_toEndOf="@id/countryText" />
 
     <TextView
         android:id="@+id/regionText"
@@ -38,23 +36,22 @@
         android:layout_height="wrap_content"
 
         android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="64dp"
+        android:width="80dp"
         android:text="Region"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/countryText"
 
-        android:width="80dp"/>
+        app:layout_constraintTop_toBottomOf="@+id/countryText" />
 
     <AutoCompleteTextView
         android:id="@+id/regionTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="64dp"
+        android:layout_marginStart="32dp"
+        android:width="132dp"
         android:hint="Region"
         app:layout_constraintBaseline_toBaselineOf="@+id/regionText"
-        app:layout_constraintStart_toEndOf="@+id/regionText"
-        android:width="100dp"
-        />
+        app:layout_constraintStart_toEndOf="@+id/regionText" />
 
     <TextView
         android:id="@+id/subregionText"
@@ -62,10 +59,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
 
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="64dp"
         android:width="80dp"
 
-        android:text="Country"
+        android:text="Subregion"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/regionText" />
 
@@ -73,8 +70,8 @@
         android:id="@+id/subregionTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="64dp"
-        android:width="100dp"
+        android:layout_marginStart="32dp"
+        android:width="132dp"
         android:hint="Subregion"
         app:layout_constraintBaseline_toBaselineOf="@+id/subregionText"
         app:layout_constraintStart_toEndOf="@+id/subregionText" />
@@ -99,5 +96,77 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/countryButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:text="Go"
+        app:layout_constraintStart_toEndOf="@+id/countryTextView"
+        app:layout_constraintTop_toTopOf="@+id/countryTextView" />
+
+    <Button
+        android:id="@+id/regionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:text="Go"
+        app:layout_constraintStart_toEndOf="@+id/regionTextView"
+        app:layout_constraintTop_toTopOf="@+id/regionTextView" />
+
+    <Button
+        android:id="@+id/subregionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:text="Go"
+        app:layout_constraintStart_toEndOf="@+id/subregionTextView"
+        app:layout_constraintTop_toTopOf="@+id/subregionTextView" />
+
+    <TextView
+        android:id="@+id/fromDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="64dp"
+        android:text="From"
+        android:width="80dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/subregionText" />
+
+    <TextView
+        android:id="@+id/toDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:width="80dp"
+        android:text="To"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fromDate" />
+
+    <EditText
+        android:id="@+id/fromDateTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:width="200dp"
+        android:ems="10"
+        android:inputType="date"
+        app:layout_constraintBaseline_toBaselineOf="@id/fromDate"
+        app:layout_constraintStart_toEndOf="@+id/fromDate"
+        app:layout_constraintTop_toTopOf="@+id/fromDate" />
+
+    <EditText
+        android:id="@+id/toDateTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:width="200dp"
+        android:ems="10"
+        android:inputType="date"
+        app:layout_constraintBaseline_toBaselineOf="@+id/toDate"
+        app:layout_constraintStart_toEndOf="@+id/toDate" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

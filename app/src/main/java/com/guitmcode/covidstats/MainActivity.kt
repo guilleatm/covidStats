@@ -1,5 +1,6 @@
 package com.guitmcode.covidstats
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -7,6 +8,7 @@ import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
@@ -37,6 +39,13 @@ class MainActivity : AppCompatActivity(), MainView {
 
 	lateinit var presenter : Presenter
 
+	override lateinit var countryButton : Button
+	override lateinit var regionButton : Button
+	override lateinit var subregionButton : Button
+
+	lateinit var fromDateTextView : EditText
+	lateinit var toDateTextView : EditText
+
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_main)
@@ -47,14 +56,35 @@ class MainActivity : AppCompatActivity(), MainView {
 		progressBar = findViewById(R.id.progressBar)
 		chosenPlace = findViewById(R.id.chosenPlace)
 
+		countryButton = findViewById(R.id.countryButton)
+		regionButton = findViewById(R.id.regionButton)
+		subregionButton = findViewById(R.id.subregionButton)
+
 		regionText = findViewById(R.id.regionText)
 		regionTextView = findViewById(R.id.regionTextView)
 
 		subregionText = findViewById(R.id.subregionText)
 		subregionTextView = findViewById(R.id.subregionTextView)
 
+		fromDateTextView = findViewById(R.id.fromDateTextView)
+		toDateTextView = findViewById(R.id.toDateTextView)
+
 		val model = Model(applicationContext)
 		presenter = Presenter(this, model)
+
+		countryButton.setOnClickListener {
+			presenter.goForRegions()
+		}
+
+		regionButton.setOnClickListener {
+			presenter.goForSubregions()
+		}
+
+		subregionButton.setOnClickListener {
+			goStatistics()
+		}
+
+
 	}
 
 
@@ -65,6 +95,7 @@ class MainActivity : AppCompatActivity(), MainView {
 			val v = if (value) View.VISIBLE else View.GONE
 			countryText.visibility = v
 			countryTextView.visibility = v
+			countryButton.visibility = v
 		}
 
 	override var regionVisible: Boolean
@@ -73,6 +104,7 @@ class MainActivity : AppCompatActivity(), MainView {
 			val v = if (value) View.VISIBLE else View.GONE
 			regionText.visibility = v
 			regionTextView.visibility = v
+			regionButton.visibility = v
 		}
 
 	override var subregionVisible: Boolean
@@ -81,6 +113,7 @@ class MainActivity : AppCompatActivity(), MainView {
 			val v = if (value) View.VISIBLE else View.GONE
 			subregionText.visibility = v
 			subregionTextView.visibility = v
+			subregionButton.visibility = v
 		}
 
 	override var progressBarVisible: Boolean
@@ -106,8 +139,10 @@ class MainActivity : AppCompatActivity(), MainView {
 					val countryWrote = Country("null_id", textWrote)
 
 					countries.binarySearch { it.compareTo(countryWrote) }.let {
+						countryButton.isEnabled = it >= 0
 						if (it >= 0)
 							presenter.setChosenCountry(countries[it])
+
 					}
 				}
 
@@ -123,7 +158,6 @@ class MainActivity : AppCompatActivity(), MainView {
 		}
 	}
 
-
 	override fun showRegions(regions: List<Region>) {
 		val regionsStringList: List<String> = regions.map { it.name }
 		val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, regionsStringList)
@@ -136,6 +170,8 @@ class MainActivity : AppCompatActivity(), MainView {
 					val textWrote = p0.toString()
 					val regionWrote = Region("null_id", textWrote)
 					regions.binarySearch { it.compareTo(regionWrote) }.let {
+						if (it >= 0)
+							regionButton.isEnabled = it >= 0
 						if (it >= 0)
 							presenter.setChosenRegion(regions[it])
 					}
@@ -166,8 +202,10 @@ class MainActivity : AppCompatActivity(), MainView {
 					val textWrote = p0.toString()
 					val subregionWrote = Subregion("null_id", textWrote)
 					subregions.binarySearch { it.compareTo(subregionWrote) }.let {
+						subregionButton.isEnabled = it >= 0
 						if (it >= 0)
 							presenter.setChosenSubregion(subregions[it])
+
 					}
 				}
 
@@ -196,6 +234,17 @@ class MainActivity : AppCompatActivity(), MainView {
 		}
 
 		chosenPlace.setText(place)
+	}
+
+	private fun goStatistics() {
+//		val intent = Intent(this, DisplayMessageActivity::class.java).apply {
+//			putExtra(EXTRA_MESSAGE, message)
+//		}
+//		startActivity(intent)
+
+		val intent = Intent(this, StatisticsActivity::class.java)
+		startActivity(intent)
+
 	}
 
 }

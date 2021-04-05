@@ -1,5 +1,6 @@
 package com.guitmcode.covidstats
 
+import android.widget.Button
 import com.guitmcode.covidstats.model.Country
 import com.guitmcode.covidstats.model.Region
 import com.guitmcode.covidstats.model.Subregion
@@ -10,6 +11,10 @@ interface MainView {
     var subregionVisible: Boolean
 
     var progressBarVisible: Boolean
+
+    var countryButton: Button
+    var regionButton: Button
+    var subregionButton: Button
 
     fun showError(message: String)
 
