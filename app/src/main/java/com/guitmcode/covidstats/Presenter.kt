@@ -11,8 +11,7 @@ import com.guitmcode.covidstats.model.Country
 import com.guitmcode.covidstats.model.Model
 import com.guitmcode.covidstats.model.Region
 import com.guitmcode.covidstats.model.Subregion
-
-
+import java.time.LocalDate
 
 
 class Presenter (val view : MainView, val model: Model) {
@@ -114,7 +113,7 @@ class Presenter (val view : MainView, val model: Model) {
 
 
 
-	fun goCovidData() {
+	fun goCovidData(from: LocalDate, to: LocalDate) {
 
 		model.getCovidData(object : Response.Listener<List<CovidData>> { // Se puede convertir a lambda
 			override fun onResponse(data: List<CovidData>?) {
@@ -132,6 +131,6 @@ class Presenter (val view : MainView, val model: Model) {
 				view.showError(error.toString())
 			}
 
-		}, "hola", "au")
+		}, from, to)
 	}
 }

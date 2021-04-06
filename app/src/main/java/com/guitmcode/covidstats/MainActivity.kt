@@ -23,6 +23,7 @@ import com.guitmcode.covidstats.model.Region
 import com.guitmcode.covidstats.model.Subregion
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.Serializable
+import java.time.LocalDate
 import javax.xml.transform.ErrorListener
 
 
@@ -76,7 +77,8 @@ class MainActivity : AppCompatActivity(), MainView {
 		presenter = Presenter(this, model)
 
 		countryButton.setOnClickListener {
-			presenter.goCovidData()
+			val dates = getDates()
+			presenter.goCovidData(dates[0], dates[1])
 		}
 
 		regionButton.setOnClickListener {
@@ -90,7 +92,7 @@ class MainActivity : AppCompatActivity(), MainView {
 
 	}
 
-
+	private fun getDates() : ArrayList<LocalDate> = arrayListOf<LocalDate>(LocalDate.parse(fromDateTextView.text), LocalDate.parse(toDateTextView.text))
 
 	override var countryVisible: Boolean
 		get() = countryText.visibility == View.VISIBLE

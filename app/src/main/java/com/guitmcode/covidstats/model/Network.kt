@@ -10,8 +10,10 @@ import com.guitmcode.covidstats.CovidData
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
+import java.time.LocalDate
 import java.util.*
 import kotlin.collections.ArrayList
+import java.time.format.DateTimeFormatter
 
 private const val BASE_URL = "https://api.covid19tracking.narrativa.com/api"
 private const val COUNTRIES = "countries"
@@ -21,7 +23,7 @@ private  const val NAME_LABEL = "name"
 private const val ID_LABEL = "id"
 
 //private const val "https://api.covid19tracking.narrativa.com/api/country/spain/region/c_valenciana/sub_region/castellon?date_from=2021-03-01&date_to=2021-03-07"
-private const val DATA_URL = "https://api.covid19tracking.narrativa.com/api?date_from=2021-02-10&date_to=2021-02-13"
+private const val DATA_URL = "https://api.covid19tracking.narrativa.com/api?date_from=2021-02-10&date_to=2021-02-17"
 
 
 
@@ -164,11 +166,11 @@ class Network private constructor (context : Context) {
 	}
 
 
-	fun getCovidData(listener: Response.Listener<List<CovidData>>, errorListener: Response.ErrorListener, from: String, to: String) {
+	fun getCovidData(listener: Response.Listener<List<CovidData>>, errorListener: Response.ErrorListener, from: LocalDate, to: LocalDate) {
 		val url = "$DATA_URL"
 
 		val jsonObjectRequest = JsonObjectRequest(Request.Method.GET, url, null,
-			{ response -> processCovidData(response, listener) },
+			{ response -> processCovidData(response, listener, from, to) },
 			{ error -> errorListener.onErrorResponse(error) }
 		)
 		queue.add(jsonObjectRequest)
@@ -176,7 +178,9 @@ class Network private constructor (context : Context) {
 
 	private fun processCovidData(
 		response: JSONObject,
-		listener: Response.Listener<List<CovidData>>
+		listener: Response.Listener<List<CovidData>>,
+		from: LocalDate,
+		to: LocalDate
 	) {
 		val data = ArrayList<CovidData>()
 
@@ -185,29 +189,25 @@ class Network private constructor (context : Context) {
 			val dataObject : JSONObject = response.getJSONObject("dates")
 
 
+			var aux: LocalDate = from
+			val toPlus: LocalDate = to.plusDays(1)
+			while (aux != toPlus) {
 
-			val dateObject : JSONObject = dataObject.getJSONObject("2021-02-12")
-			Log.d("covidStats", dateObject.toString())
-			val countriesObject : JSONObject = dateObject.getJSONObject("countries")
-			val countryObject : JSONObject = countriesObject.getJSONObject("Spain")
-
-
-
-			val confirmed = countryObject.getInt("today_confirmed")
-			val deaths = countryObject.getInt("today_deaths")
-			val hospitalized = countryObject.getInt("today_new_total_hospitalised_patients")
-			val ICU = countryObject.getInt("today_new_intensive_care")
+				val dateObject : JSONObject = dataObject.getJSONObject(aux.toString())
+				val countriesObject : JSONObject = dateObject.getJSONObject("countries")
+				val countryObject : JSONObject = countriesObject.getJSONObject("Spain")
 
 
+				val confirmed = countryObject.getInt("today_confirmed")
+				val deaths = countryObject.getInt("today_deaths")
+				val hospitalized = countryObject.getInt("today_new_total_hospitalised_patients")
+				val ICU = countryObject.getInt("today_new_intensive_care")
 
-			Log.d("covidStats", confirmed.toString())
-
-			data.add(CovidData("Fecha", confirmed, deaths, hospitalized, ICU))
-			data.add(CovidData("Paco", confirmed, deaths, hospitalized, ICU))
-			data.add(CovidData("Pepe", confirmed, deaths, hospitalized, ICU))
+				data.add(CovidData(aux.toString(), confirmed, deaths, hospitalized, ICU))
 
 
-
+				aux = aux.plusDays(1)
+			}
 
 		} catch (e: JSONException) {
 			Log.d("covidStats", "Algo falla (NETWORK)")
