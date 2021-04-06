@@ -2,6 +2,7 @@ package com.guitmcode.covidstats.model
 
 import android.content.Context
 import com.android.volley.Response
+import com.guitmcode.covidstats.CovidData
 
 class Model (context: Context){
 
@@ -17,5 +18,9 @@ class Model (context: Context){
 
 	fun getSubregions(listener: Response.Listener<List<Subregion>>, errorListener: Response.ErrorListener, country: Country, region: Region) {
 		network.getSubregions(listener, errorListener, country, region)
+	}
+
+	fun getCovidData(listener: Response.Listener<List<CovidData>>, errorListener: Response.ErrorListener, from: String, to: String) {
+		network.getCovidData(listener, errorListener, from, to)
 	}
 }

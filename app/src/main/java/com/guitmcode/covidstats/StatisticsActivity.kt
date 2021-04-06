@@ -1,13 +1,11 @@
 package com.guitmcode.covidstats
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_statistics.*
+
 
 // Hemos tomado la decisión ejecutiva de no utilizar la estructura MVP
 
@@ -19,17 +17,19 @@ class StatisticsActivity : AppCompatActivity() {
 		Log.d("covidStats", "esto va flama")
 
 
-		var names = ArrayList<String>()
-		names.add("Hola")
-		names.add("Que tal")
+		val intent = intent
+		val list = intent.getSerializableExtra("data") as ArrayList<CovidData>
 
-		var wifiAdapter = WifiAdapter(names)
+
+
+
+		var myAdapter = RecyclerViewAdapter(list)
 
 		wifiList.apply {
 			// vertical layout
 			layoutManager = LinearLayoutManager(applicationContext)
 			// set adapter
-			adapter = wifiAdapter
+			adapter = myAdapter
 
 			// Touch handling
 

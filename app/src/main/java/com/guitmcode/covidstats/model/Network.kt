@@ -6,9 +6,12 @@ import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.guitmcode.covidstats.CovidData
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
+import java.util.*
+import kotlin.collections.ArrayList
 
 private const val BASE_URL = "https://api.covid19tracking.narrativa.com/api"
 private const val COUNTRIES = "countries"
@@ -16,6 +19,11 @@ private const val REGIONS = "regions"
 private const val SUBREGIONS = "sub_regions"
 private  const val NAME_LABEL = "name"
 private const val ID_LABEL = "id"
+
+//private const val "https://api.covid19tracking.narrativa.com/api/country/spain/region/c_valenciana/sub_region/castellon?date_from=2021-03-01&date_to=2021-03-07"
+private const val DATA_URL = "https://api.covid19tracking.narrativa.com/api?date_from=2021-02-10&date_to=2021-02-13"
+
+
 
 class Network private constructor (context : Context) {
 
@@ -153,6 +161,64 @@ class Network private constructor (context : Context) {
 		Log.d("covidStats", "Subregion 1: ${subregions[0].name}")
 
 		listener.onResponse(subregions)
+	}
+
+
+	fun getCovidData(listener: Response.Listener<List<CovidData>>, errorListener: Response.ErrorListener, from: String, to: String) {
+		val url = "$DATA_URL"
+
+		val jsonObjectRequest = JsonObjectRequest(Request.Method.GET, url, null,
+			{ response -> processCovidData(response, listener) },
+			{ error -> errorListener.onErrorResponse(error) }
+		)
+		queue.add(jsonObjectRequest)
+	}
+
+	private fun processCovidData(
+		response: JSONObject,
+		listener: Response.Listener<List<CovidData>>
+	) {
+		val data = ArrayList<CovidData>()
+
+		try {
+			// Preferible con constantes
+			val dataObject : JSONObject = response.getJSONObject("dates")
+
+
+
+			val dateObject : JSONObject = dataObject.getJSONObject("2021-02-12")
+			Log.d("covidStats", dateObject.toString())
+			val countriesObject : JSONObject = dateObject.getJSONObject("countries")
+			val countryObject : JSONObject = countriesObject.getJSONObject("Spain")
+
+
+
+			val confirmed = countryObject.getInt("today_confirmed")
+			val deaths = countryObject.getInt("today_deaths")
+			val hospitalized = countryObject.getInt("today_new_total_hospitalised_patients")
+			val ICU = countryObject.getInt("today_new_intensive_care")
+
+
+
+			Log.d("covidStats", confirmed.toString())
+
+			data.add(CovidData("Fecha", confirmed, deaths, hospitalized, ICU))
+			data.add(CovidData("Paco", confirmed, deaths, hospitalized, ICU))
+			data.add(CovidData("Pepe", confirmed, deaths, hospitalized, ICU))
+
+
+
+
+		} catch (e: JSONException) {
+			Log.d("covidStats", "Algo falla (NETWORK)")
+			listener.onResponse(null)
+		}
+
+		//data.sort()
+
+		Log.d("covidStats", "País 1: ${data[0].confirmedCases}")
+
+		listener.onResponse(data)
 	}
 
 }

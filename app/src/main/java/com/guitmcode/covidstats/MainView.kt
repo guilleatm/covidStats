@@ -23,4 +23,6 @@ interface MainView {
     fun showSubregions(countries: List<Subregion>)
 
     fun showChosenPlace(countrie: Country, region: Region?, subregion: Subregion?)
+
+    fun goCountry(data: List<CovidData>)
 }

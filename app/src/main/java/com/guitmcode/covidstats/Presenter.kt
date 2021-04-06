@@ -110,4 +110,28 @@ class Presenter (val view : MainView, val model: Model) {
 		this.subregion = subregion
 		view.showChosenPlace(this.country!!, this.region, this.subregion)
 	}
+
+
+
+
+	fun goCovidData() {
+
+		model.getCovidData(object : Response.Listener<List<CovidData>> { // Se puede convertir a lambda
+			override fun onResponse(data: List<CovidData>?) {
+				view.progressBarVisible = false
+				if (data != null) {
+					view.goCountry(data)
+				} else {
+					Log.d("covidStats", "covid dta is null")
+				}
+
+
+			}
+		}, object : Response.ErrorListener { // Se puede convertir a lambda
+			override fun onErrorResponse(error: VolleyError?) {
+				view.showError(error.toString())
+			}
+
+		}, "hola", "au")
+	}
 }

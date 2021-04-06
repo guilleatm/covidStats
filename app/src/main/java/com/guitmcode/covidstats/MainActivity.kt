@@ -2,6 +2,7 @@ package com.guitmcode.covidstats
 
 import android.content.Intent
 import android.os.Bundle
+import android.provider.AlarmClock.EXTRA_MESSAGE
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -13,6 +14,7 @@ import androidx.core.widget.addTextChangedListener
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.Response
+import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.guitmcode.covidstats.model.Country
@@ -20,6 +22,7 @@ import com.guitmcode.covidstats.model.Model
 import com.guitmcode.covidstats.model.Region
 import com.guitmcode.covidstats.model.Subregion
 import kotlinx.android.synthetic.main.activity_main.*
+import java.io.Serializable
 import javax.xml.transform.ErrorListener
 
 
@@ -73,7 +76,7 @@ class MainActivity : AppCompatActivity(), MainView {
 		presenter = Presenter(this, model)
 
 		countryButton.setOnClickListener {
-			goCountry()
+			presenter.goCovidData()
 		}
 
 		regionButton.setOnClickListener {
@@ -236,9 +239,20 @@ class MainActivity : AppCompatActivity(), MainView {
 		chosenPlace.setText(place)
 	}
 
-	private fun goCountry() {
-		val intent = Intent(this, StatisticsActivity::class.java)
+	override fun goCountry(data: List<CovidData>) {
+
+
+
+		//val intent = Intent(this, StatisticsActivity::class.java)
+		//startActivity(intent)
+
+
+		val intent = Intent(this, StatisticsActivity::class.java).apply {
+			putExtra("data", data as Serializable)
+		}
 		startActivity(intent)
+
+
 	}
 
 	private fun goRegion() {
