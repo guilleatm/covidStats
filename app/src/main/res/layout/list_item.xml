@@ -11,6 +11,7 @@
         android:padding="5dp"
         android:orientation="vertical"
     >
+
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/ssid"
             android:layout_height="wrap_content"

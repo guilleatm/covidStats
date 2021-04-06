@@ -1,6 +1,5 @@
 package com.guitmcode.covidstats
 
-import android.R
 import android.content.Context
 import android.net.wifi.ScanResult
 import android.view.LayoutInflater
@@ -11,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 
 
-class WifiAdapter(private val wifiList: ArrayList<ScanResult>) : RecyclerView.Adapter<WifiAdapter.ViewHolder>() {
+class WifiAdapter(private val wifiList: ArrayList<String>) : RecyclerView.Adapter<WifiAdapter.ViewHolder>() {
 
 	// holder class to hold reference
 	inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -26,14 +25,14 @@ class WifiAdapter(private val wifiList: ArrayList<ScanResult>) : RecyclerView.Ad
 
 	override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 		//set values
-		holder.ssid.text =  wifiList[position].SSID
+		holder.ssid.text =  wifiList[position]
 	}
 
 	override fun getItemCount(): Int {
 		return wifiList.size
 	}
 	// update your data
-	fun updateData(scanResult: ArrayList<ScanResult>) {
+	fun updateData(scanResult: ArrayList<String>) {
 		wifiList.clear()
 		notifyDataSetChanged()
 		wifiList.addAll(scanResult)
