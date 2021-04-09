@@ -100,13 +100,18 @@ class MainActivity : AppCompatActivity(), MainView {
 		var from: LocalDate
 		var to: LocalDate
 
-		if (fromDateTextView.text.length != 10 || toDateTextView.text.length != 10) {
-			from = java.time.LocalDate.parse("2021-01-01")
-			to = java.time.LocalDate.parse("2021-01-03")
-		} else {
-			from = LocalDate.parse(fromDateTextView.text)
-			to = LocalDate.parse(toDateTextView.text)
-		}
+
+
+		from = if (fromDateTextView.text.length != 10)
+			LocalDate.parse("2021-01-01")
+		else
+			LocalDate.parse(fromDateTextView.text)
+
+
+		to = if (toDateTextView.text.length != 10)
+			LocalDate.parse("2021-01-03")
+		else
+			LocalDate.parse(toDateTextView.text)
 
 		return arrayListOf<LocalDate>(from!!, to!!)
 	}

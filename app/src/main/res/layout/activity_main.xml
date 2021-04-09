@@ -154,6 +154,7 @@
         android:width="200dp"
         android:ems="10"
         android:inputType="date"
+        android:hint="2021-01-01"
         app:layout_constraintBaseline_toBaselineOf="@id/fromDate"
         app:layout_constraintStart_toEndOf="@+id/fromDate"
         app:layout_constraintTop_toTopOf="@+id/fromDate" />
@@ -166,6 +167,7 @@
         android:width="200dp"
         android:ems="10"
         android:inputType="date"
+        android:hint="2021-01-03"
         app:layout_constraintBaseline_toBaselineOf="@+id/toDate"
         app:layout_constraintStart_toEndOf="@+id/toDate" />
 

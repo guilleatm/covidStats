@@ -36,7 +36,7 @@ class StatisticsActivity : AppCompatActivity() {
 			adapter = myAdapter
 
 			// Touch handling
-
+/*
 			listID.addOnItemTouchListener(object : RecyclerView.OnItemTouchListener {
 				override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {
 					Toast.makeText(applicationContext, "Que pasa locoo", Toast.LENGTH_SHORT).show()
@@ -50,7 +50,7 @@ class StatisticsActivity : AppCompatActivity() {
 				}
 
 			})
-
+*/
 		}
 
 
