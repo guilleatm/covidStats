@@ -23,7 +23,17 @@ private  const val NAME_LABEL = "name"
 private const val ID_LABEL = "id"
 
 //private const val "https://api.covid19tracking.narrativa.com/api/country/spain/region/c_valenciana/sub_region/castellon?date_from=2021-03-01&date_to=2021-03-07"
-private const val DATA_URL = "https://api.covid19tracking.narrativa.com/api?date_from=2021-02-10&date_to=2021-02-17"
+//private const val DATA_URL = "https://api.covid19tracking.narrativa.com/api?date_to=2021-02-10&date_from=2021-02-17"
+//https://api.covid19tracking.narrativa.com/api?date_to=2021-02-17&date_from=2021-02-10
+private const val DATA_URL = "https://api.covid19tracking.narrativa.com/api"
+private const val COUNTRY_DATA = "country"
+private const val REGION_DATA = "region"
+private const val SUBREGION_DATA = "sub_region"
+private const val FROM = "date_from="
+private const val TO = "date_to="
+
+
+//?date_from=2021-02-10&date_to=2021-02-17"
 
 
 
@@ -166,8 +176,9 @@ class Network private constructor (context : Context) {
 	}
 
 
-	fun getCovidData(listener: Response.Listener<List<CovidData>>, errorListener: Response.ErrorListener, from: LocalDate, to: LocalDate) {
-		val url = "$DATA_URL"
+	fun getCovidData(listener: Response.Listener<List<CovidData>>, errorListener: Response.ErrorListener, country: Country, region: Region?, subregion: Subregion?, from: LocalDate, to: LocalDate) {
+
+		val url = getURL(country, region, subregion, from, to)
 
 		val jsonObjectRequest = JsonObjectRequest(Request.Method.GET, url, null,
 			{ response -> processCovidData(response, listener, from, to) },
@@ -198,12 +209,22 @@ class Network private constructor (context : Context) {
 				val countryObject : JSONObject = countriesObject.getJSONObject("Spain")
 
 
-				val confirmed = countryObject.getInt("today_confirmed")
-				val deaths = countryObject.getInt("today_deaths")
+				val confirmed = countryObject.getInt("today_new_confirmed")
+				val deaths = countryObject.getInt("today_new_deaths")
 				val hospitalized = countryObject.getInt("today_new_total_hospitalised_patients")
 				val ICU = countryObject.getInt("today_new_intensive_care")
+				val openCases = countryObject.getInt("today_new_open_cases")
+				val recovered = countryObject.getInt("today_new_recovered")
 
-				data.add(CovidData(aux.toString(), confirmed, deaths, hospitalized, ICU))
+				val tt_confirmed = countryObject.getInt("today_confirmed")
+				val tt_deaths = countryObject.getInt("today_deaths")
+				val tt_hospitalized = countryObject.getInt("today_total_hospitalised_patients")
+				val tt_ICU = countryObject.getInt("today_intensive_care")
+				val tt_openCases = countryObject.getInt("today_open_cases")
+				val tt_recovered = countryObject.getInt("today_recovered")
+
+
+				data.add(CovidData(aux.toString(), confirmed, deaths, hospitalized, ICU, openCases, recovered, tt_confirmed, tt_deaths, tt_hospitalized, tt_ICU, tt_openCases, tt_recovered))
 
 
 				aux = aux.plusDays(1)
@@ -219,6 +240,20 @@ class Network private constructor (context : Context) {
 		Log.d("covidStats", "País 1: ${data[0].confirmedCases}")
 
 		listener.onResponse(data)
+	}
+
+
+	private fun getURL(country: Country, region: Region?, subregion: Subregion?, from: LocalDate, to: LocalDate): String {
+		//https://api.covid19tracking.narrativa.com/api/country/spain/region/c_valenciana/sub_region/castellon?date_from=2021-03-01&date_to=2021-03-07
+
+		if (subregion != null)
+			return "$BASE_URL/$COUNTRY_DATA/${country.id}/$REGION_DATA/${region!!.id}/$SUBREGION_DATA/${subregion.id}?$FROM${from.toString()}&$TO${to.toString()}"
+
+		if (region != null)
+			return "$BASE_URL/$COUNTRY_DATA/${country.id}/$REGION_DATA/${region.id}?$FROM${from.toString()}&$TO${to.toString()}"
+
+		return "$BASE_URL/$COUNTRY_DATA/${country.id}?$FROM${from.toString()}&$TO${to.toString()}"
+
 	}
 
 }

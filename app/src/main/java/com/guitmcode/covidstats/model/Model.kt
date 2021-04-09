@@ -21,7 +21,7 @@ class Model (context: Context){
 		network.getSubregions(listener, errorListener, country, region)
 	}
 
-	fun getCovidData(listener: Response.Listener<List<CovidData>>, errorListener: Response.ErrorListener, from: LocalDate, to: LocalDate) {
-		network.getCovidData(listener, errorListener, from, to)
+	fun getCovidData(listener: Response.Listener<List<CovidData>>, errorListener: Response.ErrorListener, country: Country, region: Region?, subregion: Subregion?, from: LocalDate, to: LocalDate) {
+		network.getCovidData(listener, errorListener, country, region, subregion, from, to)
 	}
 }

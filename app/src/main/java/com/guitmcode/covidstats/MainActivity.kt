@@ -8,6 +8,7 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.*
+
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
@@ -82,17 +83,34 @@ class MainActivity : AppCompatActivity(), MainView {
 		}
 
 		regionButton.setOnClickListener {
-			goRegion()
+			val dates = getDates()
+			presenter.goCovidData(dates[0], dates[1])
 		}
 
 		subregionButton.setOnClickListener {
-			goSubregion()
+			val dates = getDates()
+			presenter.goCovidData(dates[0], dates[1])
 		}
 
 
 	}
 
-	private fun getDates() : ArrayList<LocalDate> = arrayListOf<LocalDate>(LocalDate.parse(fromDateTextView.text), LocalDate.parse(toDateTextView.text))
+	private fun getDates() : ArrayList<LocalDate> {
+
+		var from: LocalDate
+		var to: LocalDate
+
+		if (fromDateTextView.text.length != 10 || toDateTextView.text.length != 10) {
+			from = java.time.LocalDate.parse("2021-01-01")
+			to = java.time.LocalDate.parse("2021-01-03")
+		} else {
+			from = LocalDate.parse(fromDateTextView.text)
+			to = LocalDate.parse(toDateTextView.text)
+		}
+
+		return arrayListOf<LocalDate>(from!!, to!!)
+	}
+
 
 	override var countryVisible: Boolean
 		get() = countryText.visibility == View.VISIBLE

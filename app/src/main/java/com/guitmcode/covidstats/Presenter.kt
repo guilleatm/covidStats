@@ -121,7 +121,7 @@ class Presenter (val view : MainView, val model: Model) {
 				if (data != null) {
 					view.goCountry(data)
 				} else {
-					Log.d("covidStats", "covid dta is null")
+					Log.d("covidStats", "covid data is null")
 				}
 
 
@@ -131,6 +131,6 @@ class Presenter (val view : MainView, val model: Model) {
 				view.showError(error.toString())
 			}
 
-		}, from, to)
+		}, this.country!!, this.region, this.subregion, from, to)
 	}
 }
