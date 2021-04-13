@@ -180,8 +180,23 @@ class Network private constructor (context : Context) {
 
 		val url = getURL(country, region, subregion, from, to)
 
+		var hayregion = true
+		var haysubregion = true
+		var pais = country.name
+
+		if (region?.id == null) {
+			hayregion = false
+		}
+
+		if (subregion?.id == null) {
+			haysubregion = false
+		}
+
+		Log.d("covidStats", "HayRegion: ${hayregion}")
+		Log.d("covidStats", "HaySubregion: ${haysubregion}")
+
 		val jsonObjectRequest = JsonObjectRequest(Request.Method.GET, url, null,
-			{ response -> processCovidData(response, listener, from, to) },
+			{ response -> processCovidData(response, listener, from, to, hayregion, haysubregion, pais) },
 			{ error -> errorListener.onErrorResponse(error) }
 		)
 		queue.add(jsonObjectRequest)
@@ -191,14 +206,29 @@ class Network private constructor (context : Context) {
 		response: JSONObject,
 		listener: Response.Listener<List<CovidData>>,
 		from: LocalDate,
-		to: LocalDate
+		to: LocalDate,
+		hayregion: Boolean,
+		haysubregion: Boolean,
+		pais: String
 	) {
 		val data = ArrayList<CovidData>()
 
 		try {
+			var confirmed = 0
+			var deaths = 0
+			var tt_confirmed = 0
+			var tt_deaths = 0
+			var hospitalized = 0
+			var ICU = 0
+			var openCases = 0
+			var recovered = 0
+			var tt_hospitalized = 0
+			var tt_ICU = 0
+			var tt_openCases = 0
+			var tt_recovered = 0
+
 			// Preferible con constantes
 			val dataObject : JSONObject = response.getJSONObject("dates")
-
 
 			var aux: LocalDate = from
 			val toPlus: LocalDate = to.plusDays(1)
@@ -206,23 +236,54 @@ class Network private constructor (context : Context) {
 
 				val dateObject : JSONObject = dataObject.getJSONObject(aux.toString())
 				val countriesObject : JSONObject = dateObject.getJSONObject("countries")
-				val countryObject : JSONObject = countriesObject.getJSONObject("Spain")
+				var countryObject : JSONObject = countriesObject.getJSONObject(pais)
 
-
-				val confirmed = countryObject.getInt("today_new_confirmed")
-				val deaths = countryObject.getInt("today_new_deaths")
-				val hospitalized = countryObject.getInt("today_new_total_hospitalised_patients")
-				val ICU = countryObject.getInt("today_new_intensive_care")
-				val openCases = countryObject.getInt("today_new_open_cases")
-				val recovered = countryObject.getInt("today_new_recovered")
-
-				val tt_confirmed = countryObject.getInt("today_confirmed")
-				val tt_deaths = countryObject.getInt("today_deaths")
-				val tt_hospitalized = countryObject.getInt("today_total_hospitalised_patients")
-				val tt_ICU = countryObject.getInt("today_intensive_care")
-				val tt_openCases = countryObject.getInt("today_open_cases")
-				val tt_recovered = countryObject.getInt("today_recovered")
-
+				if (hayregion) {
+					val regionsArray : JSONArray = countryObject.getJSONArray("regions")
+					val regionsObject : JSONObject = regionsArray.getJSONObject(0)
+					countryObject = regionsObject
+					if (haysubregion) {
+						val subregionsArray : JSONArray = regionsObject.getJSONArray("sub_regions")
+						val subregionsObject : JSONObject = subregionsArray.getJSONObject(0)
+						countryObject = subregionsObject
+					}
+				}
+				if (countryObject.has("today_new_confirmed")) {
+					confirmed = countryObject.getInt("today_new_confirmed")
+				}
+				if (countryObject.has("today_new_deaths")) {
+					deaths = countryObject.getInt("today_new_deaths")
+				}
+				if (countryObject.has("today_confirmed")) {
+					tt_confirmed = countryObject.getInt("today_confirmed")
+				}
+				if (countryObject.has("today_deaths")) {
+					tt_deaths = countryObject.getInt("today_deaths")
+				}
+				if (countryObject.has("today_new_total_hospitalised_patients")) {
+					hospitalized = countryObject.getInt("today_new_total_hospitalised_patients")
+				}
+				if (countryObject.has("today_new_intensive_care")) {
+					ICU = countryObject.getInt("today_new_intensive_care")
+				}
+				if (countryObject.has("today_new_open_cases")) {
+					openCases = countryObject.getInt("today_new_open_cases")
+				}
+				if (countryObject.has("today_new_recovered")) {
+					recovered = countryObject.getInt("today_new_recovered")
+				}
+				if (countryObject.has("today_total_hospitalised_patients")) {
+					tt_hospitalized = countryObject.getInt("today_total_hospitalised_patients")
+				}
+				if (countryObject.has("today_intensive_care")) {
+					tt_ICU = countryObject.getInt("today_intensive_care")
+				}
+				if (countryObject.has("today_open_cases")) {
+					tt_openCases = countryObject.getInt("today_open_cases")
+				}
+				if (countryObject.has("today_recovered")) {
+					tt_recovered = countryObject.getInt("today_recovered")
+				}
 
 				data.add(CovidData(aux.toString(), confirmed, deaths, hospitalized, ICU, openCases, recovered, tt_confirmed, tt_deaths, tt_hospitalized, tt_ICU, tt_openCases, tt_recovered))
 
