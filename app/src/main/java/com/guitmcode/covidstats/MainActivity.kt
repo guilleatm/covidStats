@@ -25,6 +25,7 @@ import com.guitmcode.covidstats.model.Subregion
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.Serializable
 import java.time.LocalDate
+import java.time.format.DateTimeParseException
 import javax.xml.transform.ErrorListener
 
 
@@ -50,6 +51,8 @@ class MainActivity : AppCompatActivity(), MainView {
 
 	lateinit var fromDateTextView : EditText
 	lateinit var toDateTextView : EditText
+	lateinit var fromDateText : TextView
+	lateinit var toDateText : TextView
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -74,20 +77,26 @@ class MainActivity : AppCompatActivity(), MainView {
 		fromDateTextView = findViewById(R.id.fromDateTextView)
 		toDateTextView = findViewById(R.id.toDateTextView)
 
+		fromDateText = findViewById(R.id.fromDate)
+		toDateText = findViewById(R.id.toDate)
+
 		val model = Model(applicationContext)
 		presenter = Presenter(this, model)
 
 		countryButton.setOnClickListener {
+			progressBarVisible = true
 			val dates = getDates()
 			presenter.goCovidData(dates[0], dates[1])
 		}
 
 		regionButton.setOnClickListener {
+			progressBarVisible = true
 			val dates = getDates()
 			presenter.goCovidData(dates[0], dates[1])
 		}
 
 		subregionButton.setOnClickListener {
+			progressBarVisible = true
 			val dates = getDates()
 			presenter.goCovidData(dates[0], dates[1])
 		}
@@ -100,20 +109,31 @@ class MainActivity : AppCompatActivity(), MainView {
 		var from: LocalDate
 		var to: LocalDate
 
-
-
-		from = if (fromDateTextView.text.length != 10)
-			LocalDate.parse("2021-01-01")
-		else
+		from = if (checkDate(fromDateTextView.text.toString()))
 			LocalDate.parse(fromDateTextView.text)
+		else {
+			Toast.makeText(this, "Formato de fecha incorrecto", Toast.LENGTH_LONG).show()
+			LocalDate.parse("2021-01-01")
+		}
 
 
-		to = if (toDateTextView.text.length != 10)
-			LocalDate.parse("2021-01-03")
-		else
+		to = if (checkDate(toDateTextView.text.toString()))
 			LocalDate.parse(toDateTextView.text)
+		else {
+			Toast.makeText(this, "Formato de fecha incorrecto", Toast.LENGTH_LONG).show()
+			LocalDate.parse("2021-01-03")
+		}
 
 		return arrayListOf<LocalDate>(from!!, to!!)
+	}
+
+	private fun checkDate(date: String) : Boolean {
+		try {
+			LocalDate.parse(date)
+		} catch (e: DateTimeParseException) {
+			return false
+		}
+		return true
 	}
 
 
@@ -124,6 +144,12 @@ class MainActivity : AppCompatActivity(), MainView {
 			countryText.visibility = v
 			countryTextView.visibility = v
 			countryButton.visibility = v
+
+			// Hasta que country no es visible, no hacemos visibles tampoco los edit Text de las fechas
+			fromDateTextView.visibility = v
+			toDateTextView.visibility = v
+			fromDateText.visibility = v
+			toDateText.visibility = v
 		}
 
 	override var regionVisible: Boolean

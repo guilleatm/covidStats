@@ -21,8 +21,8 @@ class StatisticsActivity : AppCompatActivity() {
 		Log.d("covidStats", "esto va flama")
 
 
-		val intent = intent
-		val list = intent.getSerializableExtra("data") as ArrayList<CovidData>
+		val myIntent = intent
+		val list = myIntent.getSerializableExtra("data") as ArrayList<CovidData>
 
 
 
