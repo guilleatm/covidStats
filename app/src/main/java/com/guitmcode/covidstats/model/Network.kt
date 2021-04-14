@@ -180,17 +180,9 @@ class Network private constructor (context : Context) {
 
 		val url = getURL(country, region, subregion, from, to)
 
-		var hayregion = true
-		var haysubregion = true
+		val hayregion = region != null
+		val haysubregion = subregion != null
 		var pais = country.name
-
-		if (region?.id == null) {
-			hayregion = false
-		}
-
-		if (subregion?.id == null) {
-			haysubregion = false
-		}
 
 		Log.d("covidStats", "HayRegion: ${hayregion}")
 		Log.d("covidStats", "HaySubregion: ${haysubregion}")

@@ -133,4 +133,25 @@ class Presenter (val view : MainView, val model: Model) {
 
 		}, this.country!!, this.region, this.subregion, from, to)
 	}
+
+	fun checkRechosenField(country: Country?, region: Region?, subregion: Subregion?) {
+		if (this.country != null && country != null) {
+			if (this.country != country) {
+				this.region = null
+				this.subregion = null
+
+				view.regionButton.isEnabled = false
+				view.subregionVisible = false
+				return
+			}
+		}
+		if (this.region != null && region != null) {
+			if (this.region != region) {
+				this.subregion = null
+
+				view.subregionButton.isEnabled = false
+				return
+			}
+		}
+	}
 }

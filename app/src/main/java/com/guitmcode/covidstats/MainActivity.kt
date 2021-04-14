@@ -194,9 +194,10 @@ class MainActivity : AppCompatActivity(), MainView {
 
 					countries.binarySearch { it.compareTo(countryWrote) }.let {
 						countryButton.isEnabled = it >= 0
-						if (it >= 0)
+						if (it >= 0){
+							presenter.checkRechosenField(countries[it], null, null)
 							presenter.setChosenCountry(countries[it])
-
+						}
 					}
 				}
 
