@@ -2,12 +2,9 @@ package com.guitmcode.covidstats
 
 import android.os.Bundle
 import android.util.Log
-import android.view.MotionEvent
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_statistics.*
 
 
@@ -20,14 +17,9 @@ class StatisticsActivity : AppCompatActivity() {
 
 		Log.d("covidStats", "esto va flama")
 
-
 		val myIntent = intent
 		val list = myIntent.getSerializableExtra("data") as ArrayList<CovidData>
-
-
-
-
-		var myAdapter = RecyclerViewAdapter(list)
+		var myAdapter = RecyclerViewAdapter(list, onClickListener = { view, CovidData -> showFruitDialog(view, CovidData) })
 
 		listID.apply {
 			// vertical layout
@@ -36,10 +28,10 @@ class StatisticsActivity : AppCompatActivity() {
 			adapter = myAdapter
 
 			// Touch handling
-/*
-			listID.addOnItemTouchListener(object : RecyclerView.OnItemTouchListener {
+
+			/*listID.addOnItemTouchListener(object : RecyclerView.OnItemTouchListener {
 				override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {
-					Toast.makeText(applicationContext, "Que pasa locoo", Toast.LENGTH_SHORT).show()
+					showFruitDialog(rv)
 				}
 
 				override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
@@ -49,10 +41,12 @@ class StatisticsActivity : AppCompatActivity() {
 				override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {
 				}
 
-			})
-*/
+			})*/
 		}
+	}
 
-
+	fun showFruitDialog(view: View?, covidData: CovidData?) {
+		val dialog = CovidDialog()
+		dialog.show(supportFragmentManager, "marselo videogames")
 	}
 }

@@ -1,5 +1,6 @@
 package com.guitmcode.covidstats
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 
-class RecyclerViewAdapter(private val list: ArrayList<CovidData>) : RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {
+class RecyclerViewAdapter(private val list: ArrayList<CovidData>, private val onClickListener: (View, CovidData) -> Unit) : RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {
 
 	// holder class to hold reference
 	inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -31,6 +32,13 @@ class RecyclerViewAdapter(private val list: ArrayList<CovidData>) : RecyclerView
 		holder.deaths.text = "Confirmed deaths: ${list[position].deaths}"
 		holder.hospitalized.text = "Hospitalized: ${list[position].hospitalized}"
 		holder.ICU.text = "Intesive care unit: ${list[position].ICU}"
+
+		val category = list[position]
+
+		holder.title.setOnClickListener {view ->
+			Log.d("covidStats", "click en la carta: ${list[position].date}")
+			onClickListener.invoke(view, category)
+		}
 	}
 
 	override fun getItemCount(): Int {
