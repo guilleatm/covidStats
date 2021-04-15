@@ -19,7 +19,7 @@ class StatisticsActivity : AppCompatActivity() {
 
 		val myIntent = intent
 		val list = myIntent.getSerializableExtra("data") as ArrayList<CovidData>
-		var myAdapter = RecyclerViewAdapter(list, onClickListener = { view, CovidData -> showFruitDialog(view, CovidData) })
+		var myAdapter = RecyclerViewAdapter(list, onClickListener = { view, CovidData -> showDataDialog(view, CovidData) })
 
 		listID.apply {
 			// vertical layout
@@ -45,8 +45,8 @@ class StatisticsActivity : AppCompatActivity() {
 		}
 	}
 
-	fun showFruitDialog(view: View?, covidData: CovidData?) {
-		val dialog = CovidDialog()
+	fun showDataDialog(view: View?, covidData: CovidData) {
+		val dialog = CovidDialog(covidData)
 		dialog.show(supportFragmentManager, "marselo videogames")
 	}
 }
