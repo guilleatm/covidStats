@@ -121,7 +121,7 @@ class Network private constructor (context : Context) {
 				val id = regionObject.getString(ID_LABEL)
 				val name = regionObject.getString(NAME_LABEL)
 
-				regions.add(Region(id, name))
+				regions.add(Region(id, name, country.id))
 			}
 		} catch (e: JSONException) {
 			Log.d("covidStats", "Algo falla (NETWORK) regions")

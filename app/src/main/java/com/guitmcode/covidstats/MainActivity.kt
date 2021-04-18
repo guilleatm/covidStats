@@ -223,7 +223,7 @@ class MainActivity : AppCompatActivity(), MainView {
 			addTextChangedListener(object : TextWatcher {
 				override fun afterTextChanged(p0: Editable?) {
 					val textWrote = p0.toString()
-					val regionWrote = Region("null_id", textWrote)
+					val regionWrote = Region("null_id", textWrote, null)
 					regions.binarySearch { it.compareTo(regionWrote) }.let {
 						if (it >= 0)
 							regionButton.isEnabled = it >= 0
