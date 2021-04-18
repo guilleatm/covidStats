@@ -9,7 +9,7 @@ import com.guitmcode.covidstats.model.Region
 import com.guitmcode.covidstats.model.SingletonHolder
 import com.guitmcode.covidstats.model.Subregion
 
-@Database(entities = [Country::class, Region::class, Subregion::class], version = 1, exportSchema = false)
+@Database(entities = [Country::class, Region::class], version = 2, exportSchema = false)
 
 
 

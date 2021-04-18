@@ -31,8 +31,6 @@ class Presenter (val view : MainView, val model: Model) {
 		view.regionButton.isEnabled = false
 		view.subregionButton.isEnabled = false
 
-
-
 		model.getCountries(object : Response.Listener<List<Country>> { // Se puede convertir a lambda
 			override fun onResponse(countries: List<Country>?) {
 				if (countries != null) {

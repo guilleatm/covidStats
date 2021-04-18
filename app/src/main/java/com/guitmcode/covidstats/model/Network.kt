@@ -2,11 +2,14 @@ package com.guitmcode.covidstats.model
 
 import android.content.Context
 import android.util.Log
+import androidx.room.Room
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.guitmcode.covidstats.CovidData
+import com.guitmcode.covidstats.DAO
+import com.guitmcode.covidstats.Database
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -49,14 +52,6 @@ class Network private constructor (context : Context) {
 
 
 	fun getCountries(listener: Response.Listener<List<Country>>, errorListener: Response.ErrorListener) = GlobalScope.launch(Dispatchers.Main) {
-
-
-		val countries = withContext(Dispatchers.IO) {
-			db.dao.getCountries()
-		}
-
-
-
 		val url = "$BASE_URL/$COUNTRIES"
 		Log.d("covidStats", "url countries: $url")
 		val jsonObjectRequest = JsonObjectRequest(Request.Method.GET, url, null,

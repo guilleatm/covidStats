@@ -56,16 +56,6 @@ class MainActivity : AppCompatActivity(), MainView {
 	lateinit var fromDateText : TextView
 	lateinit var toDateText : TextView
 
-	val dao : DAO
-	public var db : Database
-
-	init {
-
-		db = Room.databaseBuilder(applicationContext, com.guitmcode.covidstats.Database::class.java, "database").build()
-		dao = db.getDAO()
-
-	}
-
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_main)
