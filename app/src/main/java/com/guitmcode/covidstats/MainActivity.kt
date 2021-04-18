@@ -88,19 +88,19 @@ class MainActivity : AppCompatActivity(), MainView {
 		countryButton.setOnClickListener {
 			progressBarVisible = true
 			val dates = getDates()
-			presenter.goCovidData(dates[0], dates[1])
+			presenter.goCovidData(dates[0], dates[1], 0)
 		}
 
 		regionButton.setOnClickListener {
 			progressBarVisible = true
 			val dates = getDates()
-			presenter.goCovidData(dates[0], dates[1])
+			presenter.goCovidData(dates[0], dates[1], 1)
 		}
 
 		subregionButton.setOnClickListener {
 			progressBarVisible = true
 			val dates = getDates()
-			presenter.goCovidData(dates[0], dates[1])
+			presenter.goCovidData(dates[0], dates[1], 2)
 		}
 	}
 
@@ -196,9 +196,10 @@ class MainActivity : AppCompatActivity(), MainView {
 
 					countries.binarySearch { it.compareTo(countryWrote) }.let {
 						countryButton.isEnabled = it >= 0
-						if (it >= 0){
-							presenter.setChosenCountry(countries[it])
+						if (it >= 0) {
 							presenter.checkRechosenField(countries[it], null, null)
+							presenter.setChosenCountry(countries[it])
+
 						}
 					}
 				}
@@ -229,8 +230,9 @@ class MainActivity : AppCompatActivity(), MainView {
 					regions.binarySearch { it.compareTo(regionWrote) }.let {
 						if (it >= 0) {
 							regionButton.isEnabled = it >= 0
-							presenter.setChosenRegion(regions[it])
 							presenter.checkRechosenField(null, regions[it], null)
+							presenter.setChosenRegion(regions[it])
+
 
 						}
 
@@ -264,8 +266,8 @@ class MainActivity : AppCompatActivity(), MainView {
 					subregions.binarySearch { it.compareTo(subregionWrote) }.let {
 						subregionButton.isEnabled = it >= 0
 						if (it >= 0) {
-							presenter.setChosenSubregion(subregions[it])
 							presenter.checkRechosenField(null, null, subregions[it])
+							presenter.setChosenSubregion(subregions[it])
 						}
 					}
 				}
@@ -295,7 +297,7 @@ class MainActivity : AppCompatActivity(), MainView {
 		}
 
 		chosenPlace.setText(place)
-		
+
 	}
 
 	override fun goCountry(data: List<CovidData>) {

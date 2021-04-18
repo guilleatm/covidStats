@@ -110,7 +110,20 @@ class Presenter (val view : MainView, val model: Model) {
 
 
 
-	fun goCovidData(from: LocalDate, to: LocalDate) {
+	fun goCovidData(from: LocalDate, to: LocalDate, case: Int) {
+
+		var regionAux = region; var subregionAux = subregion;
+
+		when (case) {
+			0 -> {
+				regionAux = null
+				subregionAux = null
+			}
+			1 -> {
+				subregionAux = null
+			}
+
+		}
 
 		model.getCovidData(object : Response.Listener<List<CovidData>> { // Se puede convertir a lambda
 			override fun onResponse(data: List<CovidData>?) {
@@ -127,7 +140,7 @@ class Presenter (val view : MainView, val model: Model) {
 				view.showError(error.toString())
 			}
 
-		}, this.country!!, this.region, this.subregion, from, to)
+		}, this.country!!, regionAux, subregionAux, from, to)
 	}
 
 	fun checkRechosenField(country: Country?, region: Region?, subregion: Subregion?) {
