@@ -58,7 +58,6 @@ class Presenter (val view : MainView, val model: Model) {
 		model.getRegions(object : Response.Listener<List<Region>> { // Se puede convertir a lambda
 			override fun onResponse(regions: List<Region>?) {
 				if (!regions.isNullOrEmpty()) {
-					Log.d("covidStats", regions[0].name)
 					view.showRegions(regions)
 					view.progressBarVisible = false
 					view.regionVisible = true
@@ -119,7 +118,6 @@ class Presenter (val view : MainView, val model: Model) {
 				if (data != null) {
 					view.goCountry(data)
 				} else {
-					Log.d("covidStats", "covid data is null")
 				}
 
 

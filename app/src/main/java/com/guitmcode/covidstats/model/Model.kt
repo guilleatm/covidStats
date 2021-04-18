@@ -40,11 +40,9 @@ class Model (context: Context){
 				listener.onResponse(it)
 			}, errorListener
 			)
-			Log.d("covidStats", "buscando el chiste")
 		}
 		else {
 			listener.onResponse(countries)
-			Log.d("covidStats", "marselo funciona real mdlr sech")
 		}
 		//network.getCountries(listener, errorListener)
 	}
@@ -62,11 +60,9 @@ class Model (context: Context){
 				listener.onResponse(it)
 			}, errorListener, country
 			)
-			Log.d("covidStats", "buscando el chiste")
 		}
 		else {
 			listener.onResponse(regions)
-			Log.d("covidStats", "marselo funciona real mdlr sech")
 		}
 		//network.getRegions(listener, errorListener, country)
 	}
@@ -84,11 +80,9 @@ class Model (context: Context){
 				listener.onResponse(it)
 			}, errorListener, country, region
 			)
-			Log.d("covidStats", "buscando el chiste3")
 		}
 		else {
 			listener.onResponse(subregions)
-			Log.d("covidStats", "marselo funciona real mdlr sech3")
 		}
 
 		//network.getSubregions(listener, errorListener, country, region)

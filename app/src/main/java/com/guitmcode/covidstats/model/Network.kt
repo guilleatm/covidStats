@@ -53,7 +53,6 @@ class Network private constructor (context : Context) {
 
 	fun getCountries(listener: Response.Listener<List<Country>>, errorListener: Response.ErrorListener) = GlobalScope.launch(Dispatchers.Main) {
 		val url = "$BASE_URL/$COUNTRIES"
-		Log.d("covidStats", "url countries: $url")
 		val jsonObjectRequest = JsonObjectRequest(Request.Method.GET, url, null,
 			{ response -> processCountries(response, listener) },
 			{ error -> errorListener.onErrorResponse(error) }
@@ -76,20 +75,16 @@ class Network private constructor (context : Context) {
 				countries.add(Country(id, name))
 			}
 		} catch (e: JSONException) {
-			Log.d("covidStats", "Algo falla (NETWORK)")
 			listener.onResponse(null)
 		}
 
 		countries.sort()
-
-		Log.d("covidStats", "País 1: ${countries[0].name}")
 
 		listener.onResponse(countries)
 	}
 
 	fun getRegions(listener: Response.Listener<List<Region>>, errorListener: Response.ErrorListener, country: Country) {
 		val url = "$BASE_URL/$COUNTRIES/${country.id}/$REGIONS"
-		Log.d("covidStats", "url regions: $url")
 
 		val jsonObjectRequest = JsonObjectRequest(Request.Method.GET, url, null,
 			{ response -> processRegions(response, listener, country) },
@@ -124,20 +119,16 @@ class Network private constructor (context : Context) {
 				regions.add(Region(id, name, country.id))
 			}
 		} catch (e: JSONException) {
-			Log.d("covidStats", "Algo falla (NETWORK) regions")
 			listener.onResponse(null)
 		}
 
 		regions.sort()
-		Log.d("covidStats", "Region 1: ${regions[0].name}")
 
 		listener.onResponse(regions)
 	}
 
 	fun getSubregions(listener: Response.Listener<List<Subregion>>, errorListener: Response.ErrorListener, country: Country, region: Region) {
 		val url = "$BASE_URL/$COUNTRIES/${country.id}/$REGIONS/${region.id}/$SUBREGIONS"
-
-		Log.d("covidStats", "url subregions: $url")
 
 		val jsonObjectRequest = JsonObjectRequest(Request.Method.GET, url, null,
 			{ response -> processSubregions(response, listener, country, region) },
@@ -173,12 +164,10 @@ class Network private constructor (context : Context) {
 				subregions.add(Subregion(id, name, region.id))
 			}
 		} catch (e: JSONException) {
-			Log.d("covidStats", "Algo falla (NETWORK) subregions")
 			listener.onResponse(null)
 		}
 
 		subregions.sort()
-		Log.d("covidStats", "Subregion 1: ${subregions[0].name}")
 
 		listener.onResponse(subregions)
 	}
@@ -192,8 +181,6 @@ class Network private constructor (context : Context) {
 		val haysubregion = subregion != null
 		var pais = country.name
 
-		Log.d("covidStats", "HayRegion: ${hayregion}")
-		Log.d("covidStats", "HaySubregion: ${haysubregion}")
 
 		val jsonObjectRequest = JsonObjectRequest(Request.Method.GET, url, null,
 			{ response -> processCovidData(response, listener, from, to, hayregion, haysubregion, pais) },
@@ -214,18 +201,8 @@ class Network private constructor (context : Context) {
 		val data = ArrayList<CovidData>()
 
 		try {
-			var confirmed = 0
-			var deaths = 0
-			var tt_confirmed = 0
-			var tt_deaths = 0
-			var hospitalized = 0
-			var ICU = 0
-			var openCases = 0
-			var recovered = 0
-			var tt_hospitalized = 0
-			var tt_ICU = 0
-			var tt_openCases = 0
-			var tt_recovered = 0
+			var confirmed = 0; var deaths = 0; var hospitalized = 0; var ICU = 0; var openCases = 0; var recovered = 0;
+			var tt_confirmed = 0; var tt_deaths = 0; var tt_hospitalized = 0; var tt_ICU = 0; var tt_openCases = 0; var tt_recovered = 0;
 
 			// Preferible con constantes
 			val dataObject : JSONObject = response.getJSONObject("dates")
@@ -292,13 +269,10 @@ class Network private constructor (context : Context) {
 			}
 
 		} catch (e: JSONException) {
-			Log.d("covidStats", "Algo falla (NETWORK)")
 			listener.onResponse(null)
 		}
 
 		//data.sort()
-
-		Log.d("covidStats", "País 1: ${data[0].confirmedCases}")
 
 		listener.onResponse(data)
 	}
