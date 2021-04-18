@@ -112,7 +112,8 @@ class MainActivity : AppCompatActivity(), MainView {
 		from = if (checkDate(fromDateTextView.text.toString()))
 			LocalDate.parse(fromDateTextView.text)
 		else {
-			Toast.makeText(this, "Formato de fecha incorrecto", Toast.LENGTH_LONG).show()
+			if (fromDateTextView.text.length > 0)
+				Toast.makeText(this, "Formato de fecha incorrecto", Toast.LENGTH_LONG).show()
 			LocalDate.parse("2021-01-01")
 		}
 
@@ -120,7 +121,8 @@ class MainActivity : AppCompatActivity(), MainView {
 		to = if (checkDate(toDateTextView.text.toString()))
 			LocalDate.parse(toDateTextView.text)
 		else {
-			Toast.makeText(this, "Formato de fecha incorrecto", Toast.LENGTH_LONG).show()
+			if (fromDateTextView.text.length > 0)
+				Toast.makeText(this, "Formato de fecha incorrecto", Toast.LENGTH_LONG).show()
 			LocalDate.parse("2021-01-03")
 		}
 
@@ -225,10 +227,13 @@ class MainActivity : AppCompatActivity(), MainView {
 					val textWrote = p0.toString()
 					val regionWrote = Region("null_id", textWrote, null)
 					regions.binarySearch { it.compareTo(regionWrote) }.let {
-						if (it >= 0)
+						if (it >= 0) {
 							regionButton.isEnabled = it >= 0
-						if (it >= 0)
+							presenter.checkRechosenField(null, regions[it], null)
 							presenter.setChosenRegion(regions[it])
+
+						}
+
 					}
 				}
 
@@ -255,12 +260,13 @@ class MainActivity : AppCompatActivity(), MainView {
 			addTextChangedListener(object : TextWatcher {
 				override fun afterTextChanged(p0: Editable?) {
 					val textWrote = p0.toString()
-					val subregionWrote = Subregion("null_id", textWrote)
+					val subregionWrote = Subregion("null_id", textWrote, null)
 					subregions.binarySearch { it.compareTo(subregionWrote) }.let {
 						subregionButton.isEnabled = it >= 0
-						if (it >= 0)
+						if (it >= 0) {
+							presenter.checkRechosenField(null, null, subregions[it])
 							presenter.setChosenSubregion(subregions[it])
-
+						}
 					}
 				}
 
@@ -279,7 +285,7 @@ class MainActivity : AppCompatActivity(), MainView {
 
 	override fun showChosenPlace(countrie: Country, region: Region?, subregion: Subregion?) {
 
-		var place = countrie.name
+		/*var place = countrie.name
 
 		if (region != null) {
 			place = "$place, ${region.name}"
@@ -289,6 +295,7 @@ class MainActivity : AppCompatActivity(), MainView {
 		}
 
 		chosenPlace.setText(place)
+		*/
 	}
 
 	override fun goCountry(data: List<CovidData>) {

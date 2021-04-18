@@ -71,8 +71,27 @@ class Model (context: Context){
 		//network.getRegions(listener, errorListener, country)
 	}
 
-	fun getSubregions(listener: Response.Listener<List<Subregion>>, errorListener: Response.ErrorListener, country: Country, region: Region) {
-		network.getSubregions(listener, errorListener, country, region)
+	fun getSubregions(listener: Response.Listener<List<Subregion>>, errorListener: Response.ErrorListener, country: Country, region: Region) = GlobalScope.launch(Dispatchers.Main) {
+		val subregions = withContext(Dispatchers.IO) {
+			dao.getSubegions(region.id)
+		}
+
+		if (subregions.isEmpty()) {
+			network.getSubregions(Response.Listener {
+				GlobalScope.launch {
+					dao.insertSubregions(it)
+				}
+				listener.onResponse(it)
+			}, errorListener, country, region
+			)
+			Log.d("covidStats", "buscando el chiste3")
+		}
+		else {
+			listener.onResponse(subregions)
+			Log.d("covidStats", "marselo funciona real mdlr sech3")
+		}
+
+		//network.getSubregions(listener, errorListener, country, region)
 	}
 
 	fun getCovidData(listener: Response.Listener<List<CovidData>>, errorListener: Response.ErrorListener, country: Country, region: Region?, subregion: Subregion?, from: LocalDate, to: LocalDate) {

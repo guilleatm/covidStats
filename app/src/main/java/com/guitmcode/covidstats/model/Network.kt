@@ -170,7 +170,7 @@ class Network private constructor (context : Context) {
 				val subregionObject : JSONObject = subregionsArray[i] as JSONObject
 				val id = subregionObject.getString(ID_LABEL)
 				val name = subregionObject.getString(NAME_LABEL)
-				subregions.add(Subregion(id, name))
+				subregions.add(Subregion(id, name, region.id))
 			}
 		} catch (e: JSONException) {
 			Log.d("covidStats", "Algo falla (NETWORK) subregions")
