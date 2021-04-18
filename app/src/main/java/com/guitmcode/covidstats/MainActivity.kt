@@ -12,6 +12,8 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
+import androidx.room.Room
+import androidx.room.RoomDatabase
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.Response
@@ -53,6 +55,16 @@ class MainActivity : AppCompatActivity(), MainView {
 	lateinit var toDateTextView : EditText
 	lateinit var fromDateText : TextView
 	lateinit var toDateText : TextView
+
+	val dao : DAO
+	public var db : Database
+
+	init {
+
+		db = Room.databaseBuilder(applicationContext, com.guitmcode.covidstats.Database::class.java, "database").build()
+		dao = db.getDAO()
+
+	}
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -100,8 +112,6 @@ class MainActivity : AppCompatActivity(), MainView {
 			val dates = getDates()
 			presenter.goCovidData(dates[0], dates[1])
 		}
-
-
 	}
 
 	private fun getDates() : ArrayList<LocalDate> {

@@ -1,5 +1,9 @@
 package com.guitmcode.covidstats.model
 
+import androidx.room.Database
+import kotlin.reflect.KClass
+import kotlin.reflect.KFunction4
+
 open class SingletonHolder<out T, in A>(private val constructor: (A) -> T) {
 	@Volatile
 	private var instance: T? = null

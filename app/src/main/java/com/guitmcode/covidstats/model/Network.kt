@@ -7,11 +7,14 @@ import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.guitmcode.covidstats.CovidData
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import java.time.LocalDate
-import java.util.*
 import kotlin.collections.ArrayList
 import java.time.format.DateTimeFormatter
 
@@ -43,7 +46,17 @@ class Network private constructor (context : Context) {
 
 	val queue = Volley.newRequestQueue(context)
 
-	fun getCountries(listener: Response.Listener<List<Country>>, errorListener: Response.ErrorListener) {
+
+
+	fun getCountries(listener: Response.Listener<List<Country>>, errorListener: Response.ErrorListener) = GlobalScope.launch(Dispatchers.Main) {
+
+
+		val countries = withContext(Dispatchers.IO) {
+			db.dao.getCountries()
+		}
+
+
+
 		val url = "$BASE_URL/$COUNTRIES"
 		Log.d("covidStats", "url countries: $url")
 		val jsonObjectRequest = JsonObjectRequest(Request.Method.GET, url, null,
