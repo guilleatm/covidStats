@@ -51,7 +51,7 @@ class Model (context: Context){
 
 	fun getRegions(listener: Response.Listener<List<Region>>, errorListener: Response.ErrorListener, country: Country) = GlobalScope.launch(Dispatchers.Main) {
 		val regions = withContext(Dispatchers.IO) {
-			dao.getRegions()
+			dao.getRegions(country.id)
 		}
 
 		if (regions.isEmpty()) {
