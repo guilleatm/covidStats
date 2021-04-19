@@ -153,8 +153,8 @@ class Presenter (val view : MainView, val model: Model) {
 				view.subregionVisible = false
 				view.subregionButton.isEnabled = false
 
-				view.regionTextView.text = ""
-				view.subregionTextView.text = ""
+				//view.regionTextView.text = ""
+				//view.subregionTextView.text = ""
 				return
 			}
 		}
@@ -163,7 +163,7 @@ class Presenter (val view : MainView, val model: Model) {
 				this.subregion = null
 
 				view.subregionButton.isEnabled = false
-				view.subregionTextView.text = ""
+				//view.subregionTextView.text = ""
 				return
 			}
 		}
