@@ -181,6 +181,8 @@ class Network private constructor (context : Context) {
 		val haysubregion = subregion != null
 		var pais = country.name
 
+		Log.d("covidStats", "$hayregion, $haysubregion")
+
 
 		val jsonObjectRequest = JsonObjectRequest(Request.Method.GET, url, null,
 			{ response -> processCovidData(response, listener, from, to, hayregion, haysubregion, pais) },
